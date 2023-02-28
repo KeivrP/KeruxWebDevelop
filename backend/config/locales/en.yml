@@ -1,0 +1,62 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   "true": "foo"
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
+
+es:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "has_one revisar archivo de internacionalizacion para modificar este mensaje"
+          has_many: "%{model} no puede ser eliminado porque contiene %{record} asociados "
+        blank: "'%{attribute}' No puede estar vacio"
+        taken: "'%{value}' Ya existe"
+        inclusion: "%{attribute} no valido"
+        not_a_number: "%{value} No es un numero"
+    attributes:
+      teso/proc_conc:
+        tipo_mov_proc: Tipos de movimientos por proceso
+        codprocconc: Codigo Proceso
+        posiniref: Posicion Inicial
+        longref: Longitud Referencia
+      teso/chequera:
+        numchequera: Chequera
+        chequeini: Cheque Inicial
+        chequefin: Cheque Final
+      teso/control_teso:
+        numbenefanuchq: Beneficiario para anulacion de cheque
+        tipomovanuchq: Tipo de movimiento para anulacion de cheque
+    models:
+      teso/proc_conc: Proceso de Conciliacion
+
