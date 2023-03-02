@@ -11,7 +11,7 @@ module Doc
           password: 'DOC$P'
         )
     
-      # Configuración del archivo de configuración y otros atributos de modelo
+      # Configuración del archivo de configuración y otros atributos de  modelo
       self.table_name = "documentos_origen"
       self.primary_key = "iddoc"
       
