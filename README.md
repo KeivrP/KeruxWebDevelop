@@ -1,6 +1,6 @@
 # KeruxWebDevelopment
 
-Sistema de manejo de tickets de soporte para Kentron Sistemas
+Sistema de Kerux a la web
 
 ## Preparación
 
