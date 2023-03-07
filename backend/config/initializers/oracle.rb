@@ -1,1 +1,1 @@
-#plsql.activerecord_class = ActiveRecord::Base
+plsql.activerecord_class = ActiveRecord::Base
