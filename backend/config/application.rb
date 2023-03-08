@@ -32,6 +32,18 @@ module Backend
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.
-    config.generators.system_tests = nil
+    #config.generators.system_tests = nil
+    config.api_only = true
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "*"
+        resource(
+          "*",
+          headers: :any,
+          methods: [:get, :patch, :put, :delete, :post, :options],
+        )
+      end
+    end
   end
 end
