@@ -21,7 +21,10 @@ export const contSlice = createSlice({
   name: 'cont_slice',
   initialState,
   reducers: {},
+  //extraReducers que se utilizan para manejar los casos en que 
+  //se resuelven o están pendientes las acciones que se definen en otros lugares del código.
   extraReducers(builder) {
+   // se utiliza para definir cómo se debe actualizar el estado del slice 
     builder.addCase(getContAction.fulfilled, (state, action) => {
       state.loadingSeat = false;
       state.seat = action.payload;
