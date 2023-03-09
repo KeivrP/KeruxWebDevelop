@@ -13,9 +13,27 @@ module Cont
   
       # Se especifica el nombre de la tabla de la base de datos a utilizar
       self.table_name = 'asientos_contables'
+      self.primary_key = "idasiento"
       
-      # Se establece una relación de pertenencia a la clase Doc::DocumentoOrigen
-      belongs_to :documentoorigen, class_name: 'Doc::DocumentoOrigen', primary_key: :iddoc, foreign_key: 'iddoc'
+      # Asociaciones con otros modelos
+      belongs_to :Publicacion, foreign_key: "numpublicacion"
+      belongs_to :DocumentoOrigen, class_name: 'Doc::DocumentoOrigen', foreign_key: 'iddoc'
+      has_many :MovimientoContable, foreign_key: "idasiento"
+      
+      # Método para mostrar la referencia del documento
+      def dsp_RefDoc
+        Doc::DocumentoOrigen.try(:refdoc)
+      end
+
+      def dsp_otro
+        if Doc::DocumentoOrigen.respond_to?(:refdoc)
+            Doc::DocumentoOrigen.metodo
+        else
+          puts "El método no está definido para este objeto"
+        end
+       # "Tipo de documento no especificado" unless defined?(Doc::TipoDocumento)
+       # Doc::TipoDocumento&.desctipodoc
+      end
     end
   end
   
