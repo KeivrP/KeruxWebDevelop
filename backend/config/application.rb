@@ -33,5 +33,9 @@ module Backend
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Creacion de variables global para el manejo de la
+    # Unidad Administradora de Proceso
+    config.gcodundpro = "*"
   end
 end

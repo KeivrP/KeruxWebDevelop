@@ -19,6 +19,8 @@ module Kentron
         belongs_to :Moneda, foreign_key: "codmoneda"
         belongs_to :MonedaCamb, foreign_key: "codmoncamb"
 
+        # Métodos del modelo
+
+        # Fin de la definición de la clase
     end
   end
-  
