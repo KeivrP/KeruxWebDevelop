@@ -14,11 +14,31 @@ module Cont
         # Se especifica el nombre de la tabla o vista de la base de datos a utilizar
         self.table_name = 'asientos_contables_ua'
         
-        # Se establece una relación de pertenencia a la clase Doc::DocumentoOrigen
+        # Asociaciones con otros modelos
         belongs_to :Publicacion, foreign_key: "numpublicacion"
         belongs_to :DocumentoOrigen, class_name: 'Doc::DocumentoOrigen', foreign_key: 'iddoc'
         has_many :MovimientoContable, foreign_key: "idasiento"
+        
+        # Métodos del modelo
+        # Método para mostrar la referencia del documento
+        def dsp_FecRef
+            #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
+            self.DocumentoOrigen.try(:fecref)
+        end
 
+        # Método para mostrar el codigo de sistema que registra
+        def dsp_CodSisReg
+            #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
+            self.DocumentoOrigen.try(:codsisreg)
+        end
+
+        # Método para mostrar el codigo de sistema que registra
+        def dsp_IndSisReg
+            #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
+            controcf = ControlCf.find(1)
+            controcf.indsisreg
+        end
+        # Fin de la definición de la clase
     end
   end
   

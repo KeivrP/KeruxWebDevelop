@@ -23,24 +23,17 @@ module Cont
     belongs_to :DocumentoOrigen, class_name: "Doc::DocumentoOrigen", foreign_key: "iddoc", optional: true
     has_many :MovimientoContable, foreign_key: "idasiento"
 
+    # Métodos del modelo
     # Método para mostrar la referencia del documento
     def dsp_RefDoc
       #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
-      self.DocumentoOrigen.try(:refdoc) || ""
+      self.DocumentoOrigen.try(:refdoc)
       #documento = self.DocumentoOrigen
       #se utiliza el operador ternario (?) para comprobar si se obtuvo
       #un objeto DocumentoOrigen. Si se obtuvo, se devuelve el valor de su atributo
       #documento ? documento.refdoc : "Sin referencia de documento"
     end
 
-    def dsp_otro
-      if Doc::DocumentoOrigen.respond_to?(:refdoc)
-          Doc::DocumentoOrigen.metodo
-      else
-          puts "El método no está definido para este objeto"
-      end
-      # "Tipo de documento no especificado" unless defined?(Doc::TipoDocumento)
-      # Doc::TipoDocumento&.desctipodoc
-    end
+    # Fin de la definición de la clase
   end
 end

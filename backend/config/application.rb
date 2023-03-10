@@ -45,5 +45,9 @@ module Backend
         )
       end
     end
+
+    # Creacion de variables global para el manejo de la
+    # Unidad Administradora de Proceso
+    config.gcodundpro = "*"
   end
 end

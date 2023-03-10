@@ -19,6 +19,9 @@ module Kentron
         belongs_to :Moneda, foreign_key: "codmoneda"
         belongs_to :Sitio, foreign_key: "codsitio"
         has_many :DocumentoOrigen, foreign_key: "codmoneda"
+
+        # Métodos del modelo
+
+        # Fin de la definición de la clase
     end
   end
-  

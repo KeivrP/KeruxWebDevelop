@@ -14,6 +14,10 @@ module Kentron
         # Se especifica el nombre de la tabla de la base de datos a utilizar
         self.table_name = 'control_knt'
 
+        # Asociaciones con otros modelos
+
+        # Métodos del modelo
+
+        # Fin de la definición de la clase
     end
   end
-  

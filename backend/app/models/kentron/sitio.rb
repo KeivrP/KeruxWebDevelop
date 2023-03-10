@@ -15,6 +15,10 @@ module Kentron
         self.table_name = 'sitios'
         self.primary_key = "codsitio"
 
+        # Asociaciones con otros modelos
+
+        # Métodos del modelo
+
+        # Fin de la definición de la clase
     end
   end
-  

@@ -10,14 +10,16 @@ module Doc
             username: 'DOC',
             password: 'DOC$P'
         )
-    
+
         # Se especifica el nombre de la tabla de la base de datos a utilizar
         self.table_name = 'beneficiarios'
         self.primary_key = "numbenef"
 
         # Asociaciones con otros modelos
         has_many :DocumentoOrigen, foreign_key: "numbenef"
-      
+
+        # Métodos del modelo
+        
+        # Fin de la definición de la clase
     end
-  end
-  
+end

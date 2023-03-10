@@ -1,25 +1,22 @@
-# Se define el módulo Kentron
-module Kentron
+# Se define el módulo Doc
+module Doc
     # Se define la clase Publicacion que hereda de ApplicationRecord
-    class Moneda < ApplicationRecord
+    class Sistema < ApplicationRecord
         # Se establece la conexión a la base de datos
         self.establish_connection(
             adapter: 'oracle_enhanced',
             encoding: 'utf8',
             database: '//keruxdb:1521/PREPROD',
-            username: 'KENTRON',
-            password: 'KENTRON$P'
+            username: 'DOC',
+            password: 'DOC$P'
         )
     
         # Se especifica el nombre de la tabla de la base de datos a utilizar
-        self.table_name = 'monedas'
-        self.primary_key = "codmoneda"
-        
-        # Asociaciones con otros modelos
-        has_many :DocumentoOrigen, foreign_key: "codmoneda"
+        self.table_name = 'sistemas'
+        self.primary_key = "codsis"
 
         # Métodos del modelo
-
+        
         # Fin de la definición de la clase
     end
   end

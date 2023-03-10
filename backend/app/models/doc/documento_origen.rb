@@ -28,14 +28,10 @@ module Doc
     has_many :EventoAdmonUa, foreign_key: "iddoc"
     has_many :EventoAdmon, foreign_key: "iddoc"
 
+    # Métodos del modelo
     # Método para mostrar el tipo de documento
     def dsp_desctipodoc
-      desctipodoc = TipoDocumento.find(self.tipodoc)
-      desctipodoc.desctipodoc
-    end
-
-    def dsp_Desc
-      TipoDocumento.try(:desctipodoc)
+      self.TipoDocumento.try(:desctipodoc)
     end
 
     # Fin de la definición de la clase

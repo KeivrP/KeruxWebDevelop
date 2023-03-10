@@ -16,10 +16,15 @@ module Cont
         self.primary_key = "numpublicacion"
 
         # Asociaciones con otros modelos
+        belongs_to :EstructuraCont, foreign_key: "codestruct"
+        has_many :CuentaPublicacion, foreign_key: "numpublicacion"
         has_many :AsientoContable, foreign_key: "numpublicacion"
         has_many :AsientoContableUa, foreign_key: "numpublicacion"
         has_many :MovimientoContable, foreign_key: "numpublicacion"
-      
+        
+        # Métodos del modelo
+
+        # Fin de la definición de la clase
     end
   end
   
