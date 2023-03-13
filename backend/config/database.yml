@@ -14,17 +14,17 @@ development:
   <<: *default
   encoding: utf8
   database: //keruxdb:1521/PREPROD
-  username: SYSTEM
-  password: SYSTEM
+  username: GOB
+  password: GOB
 
 test:
   encoding: utf8
   database: //keruxdb:1521/PREPROD
-  username: SYSTEM
-  password: SYSTEM
+  username: GOB
+  password: GOB
 
 production:
   encoding: utf8
   database: //keruxdb:1521/PREPROD
-  username: SYSTEM
-  password: SYSTEM
+  username: GOB
+  password: GOB

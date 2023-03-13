@@ -37,3 +37,4 @@ group :development do
 end
 gem "rack-cors"
 gem "jbuilder" # Crear estructuras JSON de forma fácil
+gem "kaminari" #  Crear paginados
