@@ -13,6 +13,7 @@ module Cont
 
         # Se especifica el nombre de la tabla o vista de la base de datos a utilizar
         self.table_name = 'asientos_contables_ua'
+        self.primary_key = "idasiento"
         
         # Asociaciones con otros modelos
         belongs_to :Publicacion, foreign_key: "numpublicacion"

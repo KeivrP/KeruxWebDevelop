@@ -16,7 +16,8 @@ module Doc
         self.primary_key = "ruta"
         
         # Métodos del modelo
-
+        has_many :PasoRuta
+        
         # Fin de la definición de la clase 
     end
   end

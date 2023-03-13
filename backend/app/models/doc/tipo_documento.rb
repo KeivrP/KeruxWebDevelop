@@ -17,7 +17,6 @@ module Doc
 
         # Asociaciones con otros modelos
         has_many :DocumentoOrigen, foreign_key: "tipodoc"
-        has_many :AsientoContable, class_name: "Cont::AsientoContable", foreign_key: "tipodoc"
 
         # Métodos del modelo
 

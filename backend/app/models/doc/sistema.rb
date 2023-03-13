@@ -16,7 +16,7 @@ module Doc
         self.primary_key = "codsis"
 
         # Métodos del modelo
-        
+        has_many :PasoRuta
         # Fin de la definición de la clase
     end
   end
