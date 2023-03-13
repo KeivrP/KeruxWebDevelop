@@ -1,6 +1,6 @@
 # Se define el módulo Cont
 module Doc
-  # Se define la clase AsientoContable que hereda de ApplicationRecord
+  # Se define la clase DocumentoOrigen que hereda de ApplicationRecord
   class DocumentoOrigen < ApplicationRecord
     #Se establece la conexión a la base de datos
     self.establish_connection(
@@ -25,15 +25,22 @@ module Doc
     belongs_to :TipoDocumento, foreign_key: "tipodoc"
     belongs_to :Beneficiario, foreign_key: "numbenef"
     belongs_to :Moneda, class_name: "Kentron::Moneda", foreign_key: "codmoneda"
+    belongs_to :TipoCambio, class_name: "Kentron::TipoCambio", foreign_key: "codmoneda"
     has_many :EventoAdmonUa, foreign_key: "iddoc"
     has_many :EventoAdmon, foreign_key: "iddoc"
 
-    # Métodos del modelo
+    # Métodos del modeloa
     # Método para mostrar el tipo de documento
     def dsp_desctipodoc
       self.TipoDocumento.try(:desctipodoc)
     end
 
+    # Método para mostrar nombre del beneficiario del documento
+    def dsp_nombre
+      if self.numbenef != nil
+        self.Beneficiario.try(:nombre)
+      end
+    end
     # Fin de la definición de la clase
   end
 end
