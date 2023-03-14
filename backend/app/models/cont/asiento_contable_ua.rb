@@ -38,6 +38,11 @@ module Cont
             controcf = ControlCf.find(1)
             controcf.indsisreg
         end
+        
+        # Método para mostrar monto del documento
+        def monto_doc
+            self.DocumentoOrigen.try(:mtodoc)
+        end
         # Fin de la definición de la clase
     end
   end
