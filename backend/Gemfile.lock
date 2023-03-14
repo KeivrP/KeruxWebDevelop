@@ -89,9 +89,6 @@ GEM
     io-console (0.6.0)
     irb (1.6.2)
       reline (>= 0.3.0)
-    jbuilder (2.11.5)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -207,7 +204,6 @@ DEPENDENCIES
   byebug
   composite_primary_keys (~> 13.0)!
   debug
-  jbuilder
   kaminari
   multi_config
   puma (~> 5.0)
