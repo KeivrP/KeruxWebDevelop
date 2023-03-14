@@ -15,9 +15,9 @@ module Doc
         self.table_name = 'pasos_ruta'
 
         # Asociaciones con otros modelos
-        belongs_to :Sistema, foreign_key: "codproxsis"
-        belongs_to :SistemaAprob, foreign_key: "codproxsisaprob"
         belongs_to :Ruta, foreign_key: "codruta"
+        belongs_to :Sistema, foreign_key: "codproxsis"
+        belongs_to :SistemaApro, class_name: "Doc::Sistema", foreign_key: "codsisaprob"
 
         # Métodos del modelo
         

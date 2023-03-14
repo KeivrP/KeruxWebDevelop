@@ -16,6 +16,7 @@ module Cont
         self.primary_key = "codestruct"
         
         # Asociaciones con otros modelos
+        has_many :Publicacion
         
         # Métodos del modelo
 

@@ -26,13 +26,8 @@ module Cont
         # DescCuenta, Tipo, TipoAuxiliar, Nivel
         def dsp_CtaPub   
             if self.codcuenta != nil
-                codcuenta = CuentaPublicacion.where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta, tipo: "D") 
-            end
-        end
-        
-        def dsp_CtaPub2   
-            if self.codcuenta != nil
-                self.CuentaPublicacion.where(tipo: 'D') 
+                #codcuenta = CuentaPublicacion.where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta, tipo: "D").pluck(:desccuenta, :tipo, :nivel, :tipoauxiliar).first
+                codcuenta = CuentaPublicacion.select(:desccuenta, :tipo, :nivel, :tipoauxiliar).where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta, tipo: "D").first
             end
         end
 
@@ -43,11 +38,29 @@ module Cont
             end
         end
 
-        # Método obtener la descripcion del auxiliar
-        def dsp_DescAux  
-            if self.codauxiliar != nil
-                aux = Auxiliar.where(tipoauxiliar: self.tipoauxiliar, codauxiliar: self.codauxiliar )
-                aux.descauxiliar
+        # Método obtener la descripcion de la cuenta padre
+        def dsp_CuentaPadre
+            if  self.numpublicacion != nil && self.codcuenta != nil
+
+                # Obtiene el código de estructura de la publicación
+                codestruct = Cont::Publicacion.where(numpublicacion: self.numpublicacion).pluck(:codestruct).first
+
+                # Obtiene el nivel de la cuenta a buscar
+                nNivel = Cont::CuentaPublicacion.select(:nivel).where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta).first.nivel
+                                
+                if nNivel > 1 # Si la cuenta a buscar tiene un nivel mayor que 1       
+                    # Obtiene el máximo número de dígitos acumulados en la estructura        
+                    nDigMax = Cont::NivelCuenta.where(codestruct: codestruct).maximum(:digacum)
+                    
+                    # Obtiene el número de dígitos anteriores en el nivel actual de la cuenta
+                    nDigitos = Cont::NivelCuenta.select(:diganterior).where(nivel: nNivel, codestruct: codestruct).first.diganterior
+                    
+                    # Formatea el código de cuenta para que tenga nDigMax dígitos y coge sólo los nDigitos anteriores
+                    cCuenta = self.codcuenta.to_s[0, nDigitos].ljust(nDigMax, "0")
+                    
+                    # Obtiene la descripción de la cuenta
+                    cDescPadre = Cont::CuentaPublicacion.select(:desccuenta).where(numpublicacion: self.numpublicacion, codcuenta: cCuenta).first.desccuenta 
+                end
             end
         end
 
