@@ -13,6 +13,12 @@ module MetodoGlobal
         benef.letraid + "-" + benef.numid.to_s
     end
 
+    # Método para obtener nombre del beneficiario
+    def dsp_nombre
+        nombre = Doc::Beneficiario.find(self.numbenef)
+        nombre.nombre
+    end
+
     # Método para mostrar la moneda del documento
     def desc_moneda
         if self.codmoneda != nil
