@@ -16,8 +16,8 @@ module Kentron
         self.primary_key = "codmoneda"
         
         # Asociaciones con otros modelos
-        has_many :MonedaSitio
-        has_many :Sitio, through: :MonedaSitio, primary_key: [:codsitio, :codmoneda]
+        has_many :MonedaSitio, foreign_key: "codmoneda"
+        has_many :Sitio, through: :MonedaSitio
         has_many :DocumentoOrigen
 
         # Métodos del modelo

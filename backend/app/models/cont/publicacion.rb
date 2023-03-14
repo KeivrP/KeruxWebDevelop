@@ -21,7 +21,8 @@ module Cont
         has_many :AsientoContable, foreign_key: "numpublicacion"
         has_many :AsientoContableUa, foreign_key: "numpublicacion"
         has_many :MovimientoContable, foreign_key: "numpublicacion"
-        
+        has_many :DefEventoCf, foreign_key: "numpublicacion"
+
         # Métodos del modelo
 
         # Fin de la definición de la clase

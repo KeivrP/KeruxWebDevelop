@@ -25,18 +25,22 @@ module Doc
     belongs_to :TipoDocumento, foreign_key: "tipodoc"
     belongs_to :Beneficiario, foreign_key: "numbenef"
     belongs_to :VBenefActivo, foreign_key: "numbenef"
-    belongs_to :Moneda, class_name: "Kentron::Moneda", foreign_key: "codmoneda"
-    belongs_to :Sitio, class_name: "Kentron::Sitio", foreign_key: "codsitio"
-    belongs_to :MonedaSitio, class_name: "Kentron::MonedaSitio", foreign_key: [:codmoneda, :codsitio]
+    belongs_to :MonedaSitio, class_name: "Kentron::MonedaSitio", foreign_key: [ :codsitio, :codmoneda]
+    belongs_to :MonedaSitioMtoDoc, class_name: "Kentron::MonedaSitio", foreign_key: [ :codsitio, :codmonedamtodoc]
     has_many :Sitio, through: :MonedaSitio
+    has_many :Moneda, through: :MonedaSitio
 
     has_many :EventoAdmonUa, foreign_key: "iddoc"
     has_many :EventoAdmon, foreign_key: "iddoc"
     # Self joins
-    has_many   :iddocref, class_name: "DocumentoOrigen", foreign_key: "iddoc"
-    has_many   :iddocorigtransf, class_name: "DocumentoOrigen", foreign_key: "iddoc"
-    has_many   :iddoctransf, class_name: "DocumentoOrigen", foreign_key: "iddoc"
-    belongs_to :iddoc, class_name: "DocumentoOrigen", optional: true
+    has_many   :iddoc, class_name: "DocumentoOrigen", foreign_key: "iddoc"
+    belongs_to :iddocref,  class_name: "DocumentoOrigen", foreign_key: "iddocref"
+    belongs_to :iddoctransf,  class_name: "DocumentoOrigen", foreign_key: "iddoctransf"
+    belongs_to :iddocorigtransf,  class_name: "DocumentoOrigen", foreign_key: "iddocorigtransf"
+
+    #has_many   :iddocref, class_name: "DocumentoOrigen", foreign_key: "iddoc"
+    #has_many   :iddocorigtransf, class_name: "DocumentoOrigen", foreign_key: "iddoc"
+    #has_many   :iddoctransf, class_name: "DocumentoOrigen", foreign_key: "iddoc"
 
     # Métodos del modelo
     # Método para mostrar el tipo de documento

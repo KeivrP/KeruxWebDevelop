@@ -17,6 +17,8 @@ module Cont
   
       # Asociaciones con otros modelos
       belongs_to :Publicacion, foreign_key: "numpublicacion"
+      has_many :DefEventoCf, foreign_key: [:numpublicacion, :numasiento, :tipoasiento]
+
 
       # Métodos del modelo
       

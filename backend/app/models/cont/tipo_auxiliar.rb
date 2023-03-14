@@ -16,7 +16,8 @@ module Cont
         self.primary_key = "tipoauxiliar"
 
         # Asociaciones con otros modelos
-        
+        has_many :CuentaPublicacion
+
         # Métodos del modelo
         
         # Fin de la definición de la clase

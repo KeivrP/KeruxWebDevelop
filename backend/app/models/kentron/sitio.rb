@@ -17,8 +17,8 @@ module Kentron
 
         # Asociaciones con otros modelos
         has_many :DocumentoOrigen
-        has_many :MonedaSitio
-        has_many :Moneda, through: :MonedaSitio, primary_key: [:codsitio, :codmoneda]
+        has_many :MonedaSitio, foreign_key: "codsitio"
+        has_many :Moneda, through: :MonedaSitio
         #has_many :Moneda, through: :MonedaSitio, foreign_key: [:codmoneda, :codsitio]
         
         # Métodos del modelo

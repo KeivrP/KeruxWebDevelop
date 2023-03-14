@@ -1,7 +1,7 @@
 # Se define el módulo Cont
 module Cont
     # Se define la clase DefEventoCf que hereda de ApplicationRecord
-    class ControlCf < ApplicationRecord
+    class DefEventoCf < ApplicationRecord
         # Se establece la conexión a la base de datos
         self.establish_connection(
             adapter: 'oracle_enhanced',
