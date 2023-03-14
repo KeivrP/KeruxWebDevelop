@@ -1,34 +1,30 @@
 import { useState } from "react";
 import {
     IconButton,
-    InputBase,
     Menu,
     MenuItem,
-    Paper,
     Typography,
+    TextField
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-
-
 export const ButtonSearch: React.FC = () => {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); // Declaración de un estado para el elemento que va a servir como ancla del menú
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => { // Función que maneja el evento de clic en el botón de búsqueda
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
+    const handleClose = () => { // Función que maneja el evento de cerrar el menú
         setAnchorEl(null);
     };
 
-
     return (
         <div>
-            <IconButton onClick={handleClick}>
-                <SearchIcon />
-                <Typography variant="body1">Buscar</Typography>
+            <IconButton onClick={handleClick}> // Botón de búsqueda
+                <SearchIcon /> // Icono de búsqueda
+                <Typography variant="body1">Buscar</Typography> // Texto que indica la acción que realiza el botón
             </IconButton>
-            <Menu
+            <Menu // Menú desplegable que se abre al hacer clic en el botón de búsqueda
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
@@ -58,15 +54,19 @@ export const ButtonSearch: React.FC = () => {
                         },
                     },
                 }}
-                transformOrigin={{ horizontal: "left", vertical: "top" }}
-                anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+                transformOrigin={{ horizontal: "left", vertical: "top" }} // Origen de la transformación del menú
+                anchorOrigin={{ horizontal: "left", vertical: "bottom" }} // Origen del ancla del menú
             >
-                <MenuItem>
-                    <InputBase
-                        placeholder="Buscar..."
-                        inputProps={{ "aria-label": "Buscar" }}
-                       
+                <MenuItem> // Elemento del menú
+                    <TextField
+                        defaultValue="Buscar..."
+                        helperText="Buscar en todas las filas"
+                        variant="standard"
+                        InputProps={{
+                            style: { borderBottom: "1px solid red" }
+                        }}
                     />
+
                 </MenuItem>
             </Menu>
         </div>

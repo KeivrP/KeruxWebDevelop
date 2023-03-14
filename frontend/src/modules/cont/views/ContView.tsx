@@ -1,4 +1,4 @@
-import { Box, TablePagination } from "@mui/material";
+import { Box, Grid, TablePagination } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
 import CustomTable from "../../../shared/components/table/CustomTable";
 import Header from "../../../shared/layout/header";
@@ -7,8 +7,13 @@ import { getContAction } from "../cont-actions";
 import '../../../shared/layout/styles/styles.css'
 import ButtonSearch from "../../../shared/components/button/ButtonSearch";
 import { IconButtonMenu } from "../../../shared/components/button/IconButtonMenu";
+import FilterButton from "../../../shared/components/button/FilterButton";
+import OrderButton from "../../../shared/components/button/OrderButton";
 
-
+interface Filter {
+  column: string;
+  value: string;
+}
 export const ContView = () => {
   const seat = useAppSelector((state) => state.cont.seat)
   const loadingSeat = useAppSelector((state) => state.cont.loadingSeat)
@@ -39,33 +44,23 @@ export const ContView = () => {
     dispatch(getContAction())
 
   }, [])
-  
+
 
   const columns = [
     { id: 'iddoc', label: 'Id Doc.', width: '100px' },
-    { id: 'd', label: 'Descripción', width: '200px' },
-    { id: 'dsp_RefDoc', label: 'Referencia', width: '100px' },
-    { id: 'cicty', label: 'Año', width: '100px' },
-    { id: 'cdity', label: 'Período', width: '100px' },
-    { id: 'cifty', label: 'Fecha', width: '100px' },
-    { id: 'city', label: 'Publicación', width: '100px' },
+    { id: 'descasiento', label: 'Descripción', width: '200px' },
+    { id: 'refdoc', label: 'Referencia', width: '100px' },
+    { id: 'anocont', label: 'Año', width: '60px' },
+    { id: 'percont', label: 'Período', width: '80px' },
+    { id: 'fecasiento', label: 'Fecha', width: '100px' },
+    { id: 'numpublicacion', label: 'Publicación', width: '80px' },
     { id: 'name', label: 'Monto', width: '100px' },
-    { id: 'city', label: 'Estatus', width: '100px' },
+    { id: 'stsasiento', label: 'Estatus', width: '100px' },
   ];
-
-  const allRows = [
-    { name: 'Juan', age: 30, city: 'Buenos Aires' },
-    { name: 'Maria', age: 25, city: 'Madrid' },
-    { name: 'Peter', age: 40, city: 'New York' },
-    { name: 'Sara', age: 35, city: 'Berlin' },
-  ];
-  /* 
-    const filteredRows = rows.filter((row) =>
-    Object.values(row).some(
-      (value) => value.toString().toLowerCase().indexOf(filterValue.toLowerCase()) !== -1
-    )
-  ); */
-
+  const handleApplyFilters = (filters: Filter[]) => {
+    // logic to apply filters
+  };
+  const headerColumns = columns.map(column => column.label);
   return (
     <>
       <Header headerTitle="Asientos por codificar" buttonAction={goBack} />
@@ -78,11 +73,17 @@ export const ContView = () => {
           boxShadow={3}
           borderRadius={1}
         >
-          <ButtonSearch />
-         
-          {/*  <IconButtonMenu icon={mmmm} /> */}
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={6}>
+              <ButtonSearch />
+            </Grid>
+            <Grid item xs={6} style={{ textAlign: 'right' }}>
+              <FilterButton columns={headerColumns} onApplyFilter={handleApplyFilters} />
+              <OrderButton columns={headerColumns} onApplyFilter={handleApplyFilters} />
+            </Grid>
+          </Grid>
         </Box>
-        {seat && <CustomTable columns={columns} rows={seat} headerColumns={['iddoc']} maxChar={20} />}
+        {!loadingSeat && <CustomTable columns={columns} rows={seat} headerColumns={['iddoc']} maxChar={20} />}
         <div className="my-pagination">
           <Box flex="1" />
           <Box>
