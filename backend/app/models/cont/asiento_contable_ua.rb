@@ -13,6 +13,7 @@ module Cont
 
         # Se especifica el nombre de la tabla o vista de la base de datos a utilizar
         self.table_name = 'asientos_contables_ua'
+        self.primary_key = "idasiento"
         
         # Asociaciones con otros modelos
         belongs_to :Publicacion, foreign_key: "numpublicacion"
@@ -37,6 +38,12 @@ module Cont
             #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
             controcf = ControlCf.find(1)
             controcf.indsisreg
+        end
+
+        # Método para mostrar el monto del documento
+        def dsp_MtoDoc
+            #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
+            self.DocumentoOrigen.try(:mtodoc)
         end
         # Fin de la definición de la clase
     end

@@ -12,11 +12,13 @@ module Cont
         )
     
         # Se especifica el nombre de la tabla de la base de datos a utilizar
-        self.table_name = 'usuario_cf'
+        self.table_name = 'usuarios_cf'
         self.primary_key = "codusuario"
 
         # Asociaciones con otros modelos
-        belongs_to :UsuarioCf, foreign_key: "codusuariosup"
+        # Self joins
+        has_many   :codusuario, class_name: "UsuarioCf", foreign_key: "codusuario"
+        belongs_to :codusuariosup,  class_name: "UsuarioCf", foreign_key: "codusuariosup"
         
         # Métodos del modelo
         

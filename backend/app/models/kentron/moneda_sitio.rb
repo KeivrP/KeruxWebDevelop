@@ -13,12 +13,12 @@ module Kentron
     
         # Se especifica el nombre de la tabla de la base de datos a utilizar
         self.table_name = 'monedas_sitio'
-        self.primary_key = [:codmoneda, :codsitio]
+        self.primary_key = [:codsitio, :codmoneda]
 
         # Asociaciones con otros modelos
-        belongs_to :Moneda, foreign_key: "codmoneda"
         belongs_to :Sitio, foreign_key: "codsitio"
-        has_many :DocumentoOrigen, foreign_key: "codmoneda"
+        belongs_to :Moneda, foreign_key: "codmoneda"
+        has_many :DocumentoOrigen
 
         # Métodos del modelo
 
