@@ -105,7 +105,7 @@ const CustomTable: React.FC<TableProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {[...rows]
+          {rows && Array.isArray(rows) && rows.length > 0 && [...rows]
               .sort((row1, row2) => {
                 if (!sort) {
                   // Si no hay una columna seleccionada, no hay ordenamiento
