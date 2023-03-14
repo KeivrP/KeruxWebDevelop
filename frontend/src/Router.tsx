@@ -9,12 +9,12 @@ export const Router = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginView />} />
-      <Route element={<DashboardLayout><Outlet /></DashboardLayout>}>
+    {/*   <Route element={<DashboardLayout><Outlet /></DashboardLayout>}> */}
         <Route path="/dashboard" element={<DashboardView />} />
         <Route path="/users" element={<UsersView />} />
         <Route path="/cont" element={<ContView />} />
-      </Route>
-      <Route path='*' element={<Navigate to='/login' />} />
+     {/*  </Route> */}
+      <Route path='*' element={<Navigate to='/cont' />} />
     </Routes>
   )
 }
