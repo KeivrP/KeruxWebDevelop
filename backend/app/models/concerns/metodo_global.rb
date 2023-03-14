@@ -20,4 +20,11 @@ module MetodoGlobal
             moneda.nommoneda
         end
     end
+
+    # Método para mostrar nombre del beneficiario del documento
+    def dsp_nombre
+        if self.numbenef != nil
+           nombre = Doc::Beneficiario.find(self.numbenef)
+        end
+    end
 end

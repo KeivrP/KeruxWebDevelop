@@ -34,13 +34,7 @@ module Doc
     def dsp_desctipodoc
       self.TipoDocumento.try(:desctipodoc)
     end
-
-    # Método para mostrar nombre del beneficiario del documento
-    def dsp_nombre
-      if self.numbenef != nil
-        self.Beneficiario.try(:nombre)
-      end
-    end
     # Fin de la definición de la clase
   end
 end
+
