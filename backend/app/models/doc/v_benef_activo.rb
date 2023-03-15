@@ -10,9 +10,11 @@ module Doc
             username: 'DOC',
             password: 'DOC$P'
         )
-    
+
+        include MetodoGlobal
+        
         # Se especifica el nombre de la tabla de la base de datos a utilizar
-        self.table_name = 'beneficiarios'
+        self.table_name = 'v_benef_activo'
         self.primary_key = "numbenef"
 
         # Asociaciones con otros modelos

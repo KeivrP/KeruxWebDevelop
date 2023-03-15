@@ -33,14 +33,10 @@ module Doc
     has_many :EventoAdmonUa, foreign_key: "iddoc"
     has_many :EventoAdmon, foreign_key: "iddoc"
     # Self joins
-    has_many   :iddoc, class_name: "DocumentoOrigen", foreign_key: "iddoc"
-    belongs_to :iddocref,  class_name: "DocumentoOrigen", foreign_key: "iddocref"
-    belongs_to :iddoctransf,  class_name: "DocumentoOrigen", foreign_key: "iddoctransf"
-    belongs_to :iddocorigtransf,  class_name: "DocumentoOrigen", foreign_key: "iddocorigtransf"
-
-    #has_many   :iddocref, class_name: "DocumentoOrigen", foreign_key: "iddoc"
-    #has_many   :iddocorigtransf, class_name: "DocumentoOrigen", foreign_key: "iddoc"
-    #has_many   :iddoctransf, class_name: "DocumentoOrigen", foreign_key: "iddoc"
+    #has_many   :iddoc, class_name: "DocumentoOrigen", foreign_key: "iddoc"
+    #belongs_to :iddocref,  class_name: "DocumentoOrigen", foreign_key: "iddocref"
+    #belongs_to :iddoctransf,  class_name: "DocumentoOrigen", foreign_key: "iddoctransf"
+    #belongs_to :iddocorigtransf,  class_name: "DocumentoOrigen", foreign_key: "iddocorigtransf"
 
     # Métodos del modelo
     # Método para mostrar el tipo de documento
