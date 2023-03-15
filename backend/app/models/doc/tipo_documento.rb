@@ -17,6 +17,7 @@ module Doc
 
         # Asociaciones con otros modelos
         belongs_to :Ruta, foreign_key: "codruta"
+        belongs_to :PasoRuta, foreign_key: "codruta"
         has_many :DocumentoOrigen, foreign_key: "tipodoc"
         has_many :DefEventoCf, class_name: 'Cont::DefEventoCf', foreign_key: "tipodoc"
 

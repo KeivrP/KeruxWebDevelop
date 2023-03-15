@@ -23,11 +23,12 @@ module Cont
 
         # Métodos del modelo
         # Método para mostrar la informacion de la cuenta de detalle
-        # DescCuenta, Tipo, TipoAuxiliar, Nivel
-        def dsp_CtaPub   
+        # DescCuenta
+        def dsp_DesCtaPub   
             if self.codcuenta != nil
                 #codcuenta = CuentaPublicacion.where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta, tipo: "D").pluck(:desccuenta, :tipo, :nivel, :tipoauxiliar).first
-                codcuenta = CuentaPublicacion.select(:desccuenta, :tipo, :nivel, :tipoauxiliar).where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta, tipo: "D").first
+                codcuenta = CuentaPublicacion.select(:desccuenta).where(numpublicacion: self.numpublicacion, codcuenta: self.codcuenta, tipo: "D").first
+                codcuenta.desccuenta
             end
         end
 
