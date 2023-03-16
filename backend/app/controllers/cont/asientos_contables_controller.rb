@@ -32,7 +32,7 @@ class Cont::AsientosContablesController < ApplicationController
   def asiento_find
     #@ es un variable que puedo usar en toda la instancia del controlador
 
-    @asiento = Cont::AsientoContableUa.where(iddoc: params[:iddoc]).first
+    @asiento = Cont::AsientoContableUa.where(iddoc: params[:iddoc])
   end
 
   def documento_find
