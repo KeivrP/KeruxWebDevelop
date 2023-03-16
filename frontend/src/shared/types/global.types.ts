@@ -1,0 +1,1 @@
+export type ObjectAny = {[k: string]: any};
