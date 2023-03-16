@@ -82,4 +82,34 @@
     background: #FFFFFF;
    /*  border-top: 1px solid; */
   }
+
+  .box-detail {
+    box-sizing: border-box;
+    position: absolute;
+    width: 975px;
+    height: 177px;
+    left: 90px;
+    top: 100px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #92A7C0;
+    border-radius: 4px;
+  }
+
+  .box-detail1 {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 15px;
+    gap: 9px;
+    position: absolute;
+    left: 6.25%;
+    right: 26.04%;
+    top: 34.47%;
+    bottom: 60.84%;
+    background: #0E0A2F;
+    border-bottom: 1px solid #92A7C0;
+    border-radius: 4px;
+  }
+  
   
