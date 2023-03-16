@@ -18,7 +18,8 @@ module Doc
         belongs_to :Ruta, foreign_key: "codruta"
         belongs_to :Sistema, foreign_key: "codproxsis"
         belongs_to :SistemaApro, class_name: "Doc::Sistema", foreign_key: "codsisaprob"
-
+        has_many :TipoDocumento, foreign_key: "codruta"
+        
         # Métodos del modelo
         
         # Fin de la definición de la clase
