@@ -11,7 +11,10 @@ import dayjs, { Dayjs } from 'dayjs';
 import DateInput from "../../../shared/components/inputs/DateInput";
 import { getContShowAction } from "../cont-actions";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { borderRadius } from "@mui/system";
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import MonetaryInfo from "./MonetaryInfo";
+import { AccountingMove } from "./AccountingMove";
+import AcctionSeat from "./ActionsSeat";
 
 export const DetailContView = ({ iddoc }: { iddoc: string }) => {
 
@@ -371,7 +374,12 @@ export const DetailContView = ({ iddoc }: { iddoc: string }) => {
                                                 </Grid>
                                                 <Grid item xs={3} mt={1}>
                                                     <FormGroup>
-                                                        <FormControlLabel control={<Checkbox defaultChecked />} label="Reverso" />
+                                                        <FormControlLabel control={<Checkbox defaultChecked sx={{
+                                                            //color: pink[800],
+                                                            '&.Mui-checked': {
+                                                                color: "#C72747"
+                                                            },
+                                                        }} />} label="Reverso" />
 
                                                     </FormGroup>
                                                 </Grid>
@@ -491,86 +499,7 @@ export const DetailContView = ({ iddoc }: { iddoc: string }) => {
                             </Grid>
                             {/* parte de la infomacion monetaria*/}
                             <Grid item xs={3}>
-                                <Grid
-                                    container
-                                    direction="column"
-                                    justifyContent="space-around"
-                                    alignItems="stretch"
-
-                                >
-                                    {/* nombre del box azul */}
-                                    <Grid item xs={2} >
-                                        <Box
-                                            sx={{
-                                                height: '48px',
-                                                backgroundColor: '#0E0A2F',
-                                                borderRadius: 1,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
-                                            }}
-                                        >
-                                            <Typography variant="h4" color="#FFFFFF" sx={{ flex: 1, display: 'flex', alignItems: 'center', marginLeft: 4 }}>
-                                                <DeviceHubIcon sx={{ marginRight: '8px' }} />
-                                                Información Monetaria
-                                            </Typography>
-                                        </Box>
-
-                                    </Grid>
-                                    <Grid item xs={10} >
-                                        <Box
-                                            sx={{
-                                                height: '42vh',
-                                                backgroundColor: '#FFFFFF',
-                                                flexDirection: "row",
-                                                boxShadow: 2,
-                                                borderRadius: 1.5
-                                            }}
-                                        >
-                                            <Grid
-                                                container
-                                                direction="column"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                            >
-
-                                                <Grid item mt={2}>
-                                                    <Typography variant="body1">Moneda</Typography>
-                                                    <RadioGroup row aria-label="gender" name="row-radio-buttons-group">
-                                                        <FormControlLabel value="female" control={<Radio />} label="Documento" />
-                                                        <FormControlLabel value="female" control={<Radio />} label="Origen" />
-                                                    </RadioGroup>
-
-                                                </Grid>
-                                                <Grid item mt={2}>
-                                                    <TextField
-                                                        sx={{ width: '100%' }}
-                                                        id="standard-read-only-input"
-                                                        label="Monto del Docuemnto"
-                                                        value="1.000.0"
-                                                        variant="standard"
-                                                    />
-
-                                                </Grid>
-                                                <Grid item mt={2}>
-                                                    <TextField
-                                                        sx={{ width: '100%' }}
-                                                        id="standard-read-only-input"
-                                                        label="Moneda del Documento"
-                                                        value="VEF"
-                                                        variant="standard"
-                                                    />
-
-                                                </Grid>
-                                            </Grid>
-
-
-                                        </Box>
-                                    </Grid>
-
-
-
-                                </Grid>
+                                <MonetaryInfo amount="1000" currency="VEF" />
 
                             </Grid>
                         </Grid>
@@ -597,7 +526,7 @@ export const DetailContView = ({ iddoc }: { iddoc: string }) => {
                                     }}
                                 >
                                     <Typography variant="h4" color="#FFFFFF" sx={{ flex: 1, display: 'flex', alignItems: 'center', marginLeft: 4 }}>
-                                        <DeviceHubIcon sx={{ marginRight: '8px' }} />
+                                        <AccountBalanceIcon sx={{ marginRight: '8px' }} />
                                         Movimientos
                                     </Typography>
                                 </Box>
@@ -610,8 +539,20 @@ export const DetailContView = ({ iddoc }: { iddoc: string }) => {
                                         backgroundColor: '#FFFFFF',
                                     }}
                                 >
-                                    ff
-                                    {/* Contenido del Box */}
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                    >
+                                        <Grid item xs={9}>
+                                            <AccountingMove />
+
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <AcctionSeat />
+                                            </Grid>
+                                    </Grid>
                                 </Box>
                             </Grid>
 
