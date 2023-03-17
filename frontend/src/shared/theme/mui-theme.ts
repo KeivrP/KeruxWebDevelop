@@ -51,6 +51,11 @@ export const muiTheme = createTheme({
       fontWeight: 600,
       lineHeight: "22px",
     },
+    h4: {
+      fontSize: "15px",
+      fontWeight: 500,
+      lineHeight: "22px",
+    },
     body1: {
       fontSize: "15px",
       fontWeight: 300,

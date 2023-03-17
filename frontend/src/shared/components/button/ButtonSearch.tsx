@@ -20,9 +20,9 @@ export const ButtonSearch: React.FC = () => {
 
     return (
         <div>
-            <IconButton onClick={handleClick}> // Botón de búsqueda
-                <SearchIcon /> // Icono de búsqueda
-                <Typography variant="body1">Buscar</Typography> // Texto que indica la acción que realiza el botón
+            <IconButton onClick={handleClick}> 
+                <SearchIcon /> 
+                <Typography variant="body1">Buscar</Typography>  
             </IconButton>
             <Menu // Menú desplegable que se abre al hacer clic en el botón de búsqueda
                 anchorEl={anchorEl}

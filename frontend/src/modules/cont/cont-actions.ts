@@ -10,3 +10,11 @@ export const getContAction = createAsyncThunk(
     return res.data;
   }
 )
+
+export const getContShowAction = createAsyncThunk(
+  'cont_slice/getContShow',
+  async (iddoc: string) => {
+    const res = await Api.get(`/cont/asientos_contables/show?iddoc=${iddoc}`);
+    return res.data;
+  }
+);
