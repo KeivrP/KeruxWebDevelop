@@ -129,6 +129,21 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
+  #Metodos para los botones de la pantalla
+  
+  #Boton para validar asiento
+  def boton_validar
+    @movimiento_val = Cont::MovimientoContable.where(idasiento: params[:idasiento])
+    validar_asiento(@movimiento_val)
+  end
+
+  #Boton para verificar asiento
+  def boton_verificar
+    @movimiento_ver = Cont::MovimientoContable.where(idasiento: params[:idasiento])
+    validar_asiento(@movimiento_ver)
+    verifica_asiento(@movimiento_ver)
+  end
+
   #Metodos que solo puedo usar en el controlador
   private
 
@@ -227,3 +242,28 @@ class Cont::AsientosContablesController < ApplicationController
           :codcuenta, :tipoauxiliar, :codauxiliar, :montodb, :montocr,:codmoneda, :descmov)
   end
 end
+
+#Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
+def validar_asiento(movimiento) 
+  total_debito =  movimiento.sum(:montodb) 
+  total_credito = movimiento.sum(:montocr)
+  if total_debito == total_credito 
+    movimiento.each do |m| #Inicia ciclo
+    if m.tipoauxiliar != nil && m.codauxiliar == nil
+       render json: { message: "Debe ingresar un auxiliar a la cuenta." }
+       return
+    end
+    if m.montodb == 0 && m.montocr == 0
+       render json: { message: "El movimiento debe tener monto en débito o en crédito." }
+       return
+    end 
+    if m.montodb != 0 && m.montocr != 0 
+       render json: { message: "El movimiento sólo puede tener monto en débito o en crédito." }
+       return
+    end 
+  end #fin del each
+  render json: { message: "Validación Satisfactoria."}
+  else 
+    render json: { message: "Los totales del asiento no cuadran." }
+  end
+ end

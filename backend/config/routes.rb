@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     scope :asientos_contables do
       get "show", to: "asientos_contables#show"
       post "update", to: "asientos_contables#update"
+      get "boton_validar", to: "asientos_contables#boton_validar"
     end
   end
 end
