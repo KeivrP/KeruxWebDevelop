@@ -1,7 +1,7 @@
 # Controlador para la tabla Asientos Contables en el namespace Cont
 class Cont::AsientosContablesController < ApplicationController
   before_action :asiento_find, :documento_find, :movimiento_contable_find, only: [:show]
-  
+
   # Acción index para listar los registros de la tabla
   def index
     # Seleccionar los campos deseados de la tabla y paginar el resultado
@@ -17,55 +17,55 @@ class Cont::AsientosContablesController < ApplicationController
   # Acción show para mostrar un registro específico de la tabla
   def show
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    render json: {cabasiento:@asiento.as_json(methods: json_default_asiento),
-                  cabdocumento:@documento.as_json(methods: json_default_documento),
-                  detasiento:@movimiento_contable.as_json(methods: json_default_detasiento)}
+    render json: { cabasiento: @asiento.as_json(methods: json_default_asiento),
+                   cabdocumento: @documento.as_json(methods: json_default_documento),
+                   detasiento: @movimiento_contable.as_json(methods: json_default_detasiento) }
   end
 
   # Acción show para mostrar un registro específico de la tabla
   def lst_benefat
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    render json: {lstBenef:@lst_benef_activo.as_json(methods: json_lst_benef_activo),
-                  error: @lst_benef_activo.errors.full_messages.first}
+    render json: { lstBenef: @lst_benef_activo.as_json(methods: json_lst_benef_activo),
+                   error: @lst_benef_activo.errors.full_messages.first }
   end
 
   # Acción lst_cta_pub para mostrar una lista de cuentas de la publicacón
   def lst_cta_pub
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    render json: {lstctapub:@lst_cta_publicacion.as_json,
-                  error: @lst_cta_publicacion.errors.full_messages.first}
+    render json: { lstctapub: @lst_cta_publicacion.as_json,
+                   error: @lst_cta_publicacion.errors.full_messages.first }
   end
 
   # Acción lst_cod_axu para mostrar una lista de códigos de auxiliares
   def lst_cod_axu
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    render json: {lstcodaxu:@lst_cod_auxiliar.as_json,
-                  error: @lst_cod_auxiliar.errors.full_messages.first}
+    render json: { lstcodaxu: @lst_cod_auxiliar.as_json,
+                   error: @lst_cod_auxiliar.errors.full_messages.first }
   end
 
   # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de COCNT
   def lst_tip_doc_cont
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    render json: {lsttipdoccont:@lst_tipodoc_cont.as_json,
-                  error: @lst_tipodoc_cont.errors.full_messages.first}
+    render json: { lsttipdoccont: @lst_tipodoc_cont.as_json,
+                   error: @lst_tipodoc_cont.errors.full_messages.first }
   end
-  
+
   # Acción UPDATE para actualizar los cambios del front-end
   def update
-    # Encontramos el Asientos Contables  
+    # Encontramos el Asientos Contables
     asientos = Cont::AsientoContable.find_by(idasiento: params[:idasiento])
     asientos.attributes = update_asientos_params
 
-    # Evaluamos que la fecha del Asiento no se mayor a la de Dia 
-    if asientos.fecasiento.strftime("%d/%m/%Y") > Time.now.strftime("%d/%m/%Y") 
+    # Evaluamos que la fecha del Asiento no se mayor a la de Dia
+    if asientos.fecasiento.strftime("%d/%m/%Y") > Time.now.strftime("%d/%m/%Y")
       render json: { message: "La fecha del asiento debe ser menor o igual que la fecha actual." }
     else
       # Bbuscamos los parametros de control
       controcf = Cont::ControlCf.first
-      
+
       # Determinamos el Año y Periodo a partir de la fecha del asiento
-      nanod = asientos.fecasiento.strftime('%Y').to_i
-      nperd = asientos.fecasiento.strftime('%m').to_i
+      nanod = asientos.fecasiento.strftime("%Y").to_i
+      nperd = asientos.fecasiento.strftime("%m").to_i
 
       # Comparamos Ano y periodo del asiento con el de los parametros de control
       if asientos.anocont == controcf.anocont
@@ -87,7 +87,7 @@ class Cont::AsientosContablesController < ApplicationController
         # Encontramos los datos de documento_origen
         documentos_origen = Doc::DocumentoOrigen.find_by(iddoc: asientos.iddoc)
         documentos_origen.attributes = update_documentos_origen_params
-        
+
         #Valido la descripción del asiento con la del documento
         if asientos.descasiento != documentos_origen.descdoc
           documentos_origen.descdoc = asientos.descasiento
@@ -103,7 +103,7 @@ class Cont::AsientosContablesController < ApplicationController
           documentos_origen.codmonedamtodoc = plsql.proc_instalacion.codmonedainst(documentos_origen.fecdoc)
 
           # Se verifica si la fecha del documentos es mayor a la de la reconversion
-          if documentos_origen.fecdoc >  plsql.proc_reconv_knt.fecha_reconv 
+          if documentos_origen.fecdoc > plsql.proc_reconv_knt.fecha_reconv
             documentos_origen.codmoneda = plsql.proc_reconv_knt.codmoneda_post
           else
             documentos_origen.codmoneda = plsql.proc_reconv_knt.codmoneda_pre
@@ -111,26 +111,26 @@ class Cont::AsientosContablesController < ApplicationController
 
           # Calculamos el monto del Documento
           if documentos_origen.codmoneda
-            documentos_origen.tasa = plsql.proc_moneda.tasa(documentos_origen.codsitio, documentos_origen.codmoneda, documentos_origen.codmonedamtodoc, documentos_origen.fecdoc);
+            documentos_origen.tasa = plsql.proc_moneda.tasa(documentos_origen.codsitio, documentos_origen.codmoneda, documentos_origen.codmonedamtodoc, documentos_origen.fecdoc)
             documentos_origen.mtodoc = (documentos_origen.montoorig.nil? ? 0 : documentos_origen.montoorig) * (documentos_origen.tasa.nil? ? 1 : documentos_origen.tasa)
           end
         end
-        
+
         # Si se guarda bien documentos_origen, enviamos los 2 render
         if documentos_origen.save
-          render json: {asiento:asientos.as_json,
-                        doc:documentos_origen.as_json}
+          render json: { asiento: asientos.as_json,
+                         doc: documentos_origen.as_json }
         else
-          render json: documentos_origen.errors.full_messages.first, status:415
+          render json: documentos_origen.errors.full_messages.first, status: 415
         end
       else
-        render json: asientos.errors.full_messages.first, status:415
+        render json: asientos.errors.full_messages.first, status: 415
       end
     end
   end
 
   #Metodos para los botones de la pantalla
-  
+
   #Boton para validar asiento
   def boton_validar
     @movimiento_val = Cont::MovimientoContable.where(idasiento: params[:idasiento])
@@ -146,6 +146,31 @@ class Cont::AsientosContablesController < ApplicationController
 
   #Metodos que solo puedo usar en el controlador
   private
+
+  #Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
+  def validar_asiento(movimiento)
+    total_debito = movimiento.sum(:montodb)
+    total_credito = movimiento.sum(:montocr)
+    if total_debito == total_credito
+      movimiento.each do |m| #Inicia ciclo
+        if m.tipoauxiliar != nil && m.codauxiliar == nil
+          render json: { message: "Debe ingresar un auxiliar a la cuenta." }
+          return
+        end
+        if m.montodb == 0 && m.montocr == 0
+          render json: { message: "El movimiento debe tener monto en débito o en crédito." }
+          return
+        end
+        if m.montodb != 0 && m.montocr != 0
+          render json: { message: "El movimiento sólo puede tener monto en débito o en crédito." }
+          return
+        end
+      end #fin del each
+      render json: { message: "Validación Satisfactoria." }
+    else
+      render json: { message: "Los totales del asiento no cuadran." }
+    end
+  end
 
   # Método privado para encontrar un asiento por su IdDoc
   def asiento_find
@@ -168,21 +193,21 @@ class Cont::AsientosContablesController < ApplicationController
     @lst_benef_activo = Doc::VBenefActivo.select(:nombre, :numbenef)
   end
 
-  # Método privado para obtener la lista de cuentas de la publicación 
+  # Método privado para obtener la lista de cuentas de la publicación
   def lst_cta_publicacion
     @lst_cta_publicacion = Cont::CuentaPublicacion
       .select(:codcuenta, :desccuenta, :tipoauxiliar)
-      .where(numpublicacion: params[:numpublicacion],  tipo: 'D')
+      .where(numpublicacion: params[:numpublicacion], tipo: "D")
   end
 
   # Método privado para obtener la lista de codigos de auxiliares
   def lst_cod_auxiliar
     @lst_cod_auxiliar = Cont::Auxiliar
-      .select(:codauxiliar, :descauxiliar) 
-      .where(tipoauxiliar: params[:tipoauxiliar], indactivo: 'D')
+      .select(:codauxiliar, :descauxiliar)
+      .where(tipoauxiliar: params[:tipoauxiliar], indactivo: "D")
   end
 
-    # Método privado para obtener la lista de los tipos de documentos de CONT
+  # Método privado para obtener la lista de los tipos de documentos de CONT
   def lst_tipodoc_cont
     @lst_tipodoc_cont = Cont::DefEventoCf.select(:tipodoc).first.TipoDocumento
   end
@@ -225,45 +250,20 @@ class Cont::AsientosContablesController < ApplicationController
     %i[
       rifbenefact
     ]
-    end
-  
+  end
+
   #Métodos para la definición de parámetros
   def update_asientos_params
     params.require(:data_asiento).permit(:fecasiento, :descasiento)
   end
 
   def update_documentos_origen_params
-    params.require(:data_documento).permit(:tipodoc, :numbenef, :indreverso, :iddocref, :refdoc, :codsitio, :codmoneda, 
-          :montoorig)
+    params.require(:data_documento).permit(:tipodoc, :numbenef, :indreverso, :iddocref, :refdoc, :codsitio, :codmoneda,
+                                           :montoorig)
   end
 
   def update_movimientos_asiento_params
-    params.require(:data_movimiento).permit(:nummov,:anocont,:percont, :numpublicacion, 
-          :codcuenta, :tipoauxiliar, :codauxiliar, :montodb, :montocr,:codmoneda, :descmov)
+    params.require(:data_movimiento).permit(:nummov, :anocont, :percont, :numpublicacion,
+                                            :codcuenta, :tipoauxiliar, :codauxiliar, :montodb, :montocr, :codmoneda, :descmov)
   end
 end
-
-#Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
-def validar_asiento(movimiento) 
-  total_debito =  movimiento.sum(:montodb) 
-  total_credito = movimiento.sum(:montocr)
-  if total_debito == total_credito 
-    movimiento.each do |m| #Inicia ciclo
-    if m.tipoauxiliar != nil && m.codauxiliar == nil
-       render json: { message: "Debe ingresar un auxiliar a la cuenta." }
-       return
-    end
-    if m.montodb == 0 && m.montocr == 0
-       render json: { message: "El movimiento debe tener monto en débito o en crédito." }
-       return
-    end 
-    if m.montodb != 0 && m.montocr != 0 
-       render json: { message: "El movimiento sólo puede tener monto en débito o en crédito." }
-       return
-    end 
-  end #fin del each
-  render json: { message: "Validación Satisfactoria."}
-  else 
-    render json: { message: "Los totales del asiento no cuadran." }
-  end
- end
