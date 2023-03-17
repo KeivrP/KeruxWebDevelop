@@ -14,7 +14,7 @@ module MetodoGlobal
     end
 
     # Método para obtener nombre del beneficiario
-    def dsp_nombre
+    def dsp_nombrebenef
         nombre = Doc::Beneficiario.find(self.numbenef)
         nombre.nombre
     end

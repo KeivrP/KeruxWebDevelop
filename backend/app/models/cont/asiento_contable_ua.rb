@@ -7,10 +7,10 @@ module Cont
         adapter: 'oracle_enhanced',
         encoding: 'utf8',
         database: '//keruxdb:1521/PREPROD',
-        username: 'CONT',
-        password: 'CONT$P'
+        username: 'ROBERTO',
+        password: 'ROBERTO$P'
         )
-
+        
         # Se especifica el nombre de la tabla o vista de la base de datos a utilizar
         self.table_name = 'asientos_contables_ua'
         
