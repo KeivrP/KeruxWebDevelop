@@ -49,17 +49,6 @@ module Backend
     # Creacion de variables global para el manejo de la
     # Unidad Administradora de Proceso
     config.gcodundpro = "*"
-    config.api_only = true
-
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins "*"
-        resource(
-          "*",
-          headers: :any,
-          methods: [:get, :patch, :put, :delete, :post, :options],
-        )
-      end
-    end
+    config.action_controller.allow_forgery_protection = false
   end
 end

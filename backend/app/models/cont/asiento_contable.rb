@@ -7,8 +7,8 @@ module Cont
       adapter: "oracle_enhanced",
       encoding: "utf8",
       database: "//keruxdb:1521/PREPROD",
-      username: "CONT",
-      password: "CONT$P",
+      username: 'ROBERTO',
+      password: 'ROBERTO$P'
     )
 
     # Se especifica el nombre de la tabla de la base de datos a utilizar
@@ -33,6 +33,22 @@ module Cont
       #un objeto DocumentoOrigen. Si se obtuvo, se devuelve el valor de su atributo
       #documento ? documento.refdoc : "Sin referencia de documento"
     end
+
+    # Método para mostrar el codigo de sistema que registra
+    def dsp_IndSisReg
+      #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
+      controcf = ControlCf.first
+      controcf.indsisreg
+    end
+
+    # Método para mostrar el monto del documento
+    def dsp_MtoDoc
+      #asociamos la instancia con un self para que tome la relacion ya que se trabaja con modulos
+      self.DocumentoOrigen.try(:mtodoc)
+    end
+
+    #Validaciones
+    validates :fecasiento, :descasiento, presence: true
 
     # Fin de la definición de la clase
   end

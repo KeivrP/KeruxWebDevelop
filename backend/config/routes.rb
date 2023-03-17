@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :asientos_contables, only: [:index]
     scope :asientos_contables do
       get "show", to: "asientos_contables#show"
-      get "show_prueba", to: "asientos_contables#show_prueba"
+      post "update", to: "asientos_contables#update"
     end
   end
 end

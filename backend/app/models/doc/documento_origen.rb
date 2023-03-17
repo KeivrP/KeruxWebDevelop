@@ -7,8 +7,8 @@ module Doc
       adapter: "oracle_enhanced",
       encoding: "utf8",
       database: "//keruxdb:1521/PREPROD",
-      username: "DOC",
-      password: "DOC$P",
+      username: 'ROBERTO',
+      password: 'ROBERTO$P'
     )
 
     include MetodoGlobal
@@ -43,6 +43,9 @@ module Doc
     def dsp_desctipodoc
       self.TipoDocumento.try(:desctipodoc)
     end
+
+    #Validaciones
+    validates :numbenef, :tipodoc, :descdoc, :refdoc, :ano, :fecdoc, :codsitio, :codmoneda, :montoorig, presence: true
 
     # Fin de la definición de la clase
   end
