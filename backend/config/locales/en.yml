@@ -29,13 +29,18 @@
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
 
-es:
+en:
   date:
     formats:
       default: "%d/%m/%Y"
   activerecord:
     errors:
       messages:
+      models:
+        cont/movimiento_contable:
+          attributes:
+            AsientoContableUa:
+              required: "debe existir un AsientoContableUa"
         record_invalid: "Validation failed: %{errors}"
         restrict_dependent_destroy:
           has_one: "has_one revisar archivo de internacionalizacion para modificar este mensaje"
@@ -44,19 +49,5 @@ es:
         taken: "'%{value}' Ya existe"
         inclusion: "%{attribute} no valido"
         not_a_number: "%{value} No es un numero"
-    attributes:
-      teso/proc_conc:
-        tipo_mov_proc: Tipos de movimientos por proceso
-        codprocconc: Codigo Proceso
-        posiniref: Posicion Inicial
-        longref: Longitud Referencia
-      teso/chequera:
-        numchequera: Chequera
-        chequeini: Cheque Inicial
-        chequefin: Cheque Final
-      teso/control_teso:
-        numbenefanuchq: Beneficiario para anulacion de cheque
-        tipomovanuchq: Tipo de movimiento para anulacion de cheque
-    models:
-      teso/proc_conc: Proceso de Conciliacion
+
 

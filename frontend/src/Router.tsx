@@ -14,7 +14,7 @@ export const Router = () => {
         <Route path="/dashboard" element={<DashboardView />} />
         <Route path="/users" element={<UsersView />} />
         <Route path="/cont" element={<ContView />} />
-        <Route path="/cont/detail" element={<DetailContView iddoc="aun no se que poner ni como" />} />
+        <Route path="/cont/detail" element={<DetailContView idasiento="aun no se que poner ni como" />} />
      {/*  </Route> */}
       <Route path='*' element={<Navigate to='/cont' />} />
     </Routes>

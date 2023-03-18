@@ -6,24 +6,31 @@ import {
     Grid,
     Radio,
     RadioGroup,
-    TextField,
     Typography,
 } from "@mui/material";
-import DeviceHubIcon from "@mui/icons-material/DeviceHub";
-
+import { useAppDispatch } from "../../../store/hooks";
+import { updateContAction } from "../cont-actions";
 
 
 const AcctionSeat = () => {
     const [currencyType, setCurrencyType] = useState("Documento");
-
-
-
-
+    const dispatch = useAppDispatch();
     const handleCurrencyTypeChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         setCurrencyType(event.target.value);
     };
+
+    const handleClick = () => {
+        const data = {
+          //codigo,
+          //descripcion,
+        };
+        dispatch(updateContAction(data));
+
+      }
+
+
 
     return (
         <div>
@@ -33,8 +40,6 @@ const AcctionSeat = () => {
                 justifyContent="space-around"
                 alignItems="stretch"
             >
-
-
                 <Grid
                     container
                     direction="column"
@@ -79,7 +84,7 @@ const AcctionSeat = () => {
                         <Button
                             variant="contained"
                             color="primary"
-                           
+
                         >
                             My Button
                         </Button>
@@ -88,7 +93,6 @@ const AcctionSeat = () => {
                         <Button
                             variant="contained"
                             color="primary"
-                            
                         >
                             My Button
                         </Button>
@@ -97,15 +101,13 @@ const AcctionSeat = () => {
                         <Button
                             variant="contained"
                             color="primary"
-                          
+
                         >
                             My Button
                         </Button>
                     </Grid>
 
                 </Grid>
-
-
             </Grid>
         </div>
     );

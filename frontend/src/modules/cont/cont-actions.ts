@@ -13,8 +13,16 @@ export const getContAction = createAsyncThunk(
 
 export const getContShowAction = createAsyncThunk(
   'cont_slice/getContShow',
-  async (iddoc: string) => {
-    const res = await Api.get(`/cont/asientos_contables/show?iddoc=${iddoc}`);
+  async (idasiento: string) => {
+    const res = await Api.get(`/cont/asientos_contables/show?idasiento=${idasiento}`);
+    return res.data;
+  }
+)
+
+export const updateContAction = createAsyncThunk(
+  'cont_slice/updateCont',
+  async (data: any) => {
+    const res = await Api.post('/cont/asientos_contables/update', data)
     return res.data;
   }
 );
