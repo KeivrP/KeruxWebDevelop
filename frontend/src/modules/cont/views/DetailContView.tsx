@@ -12,11 +12,11 @@ import DateInput from "../../../shared/components/inputs/DateInput";
 import { getContShowAction } from "../cont-actions";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import MonetaryInfo from "./MonetaryInfo";
-import { AccountingMove } from "./AccountingMove";
-import AcctionSeat from "./ActionsSeat";
-import HeaderSeat from "./HeaderSeat";
-import DocumentOrigin from "./DocumentOrigin";
+import MonetaryInfo from "../components/MonetaryInfo";
+import { AccountingMove } from "../components/AccountingMove";
+import AcctionSeat from "../components/ActionsSeat";
+import HeaderSeat from "../components/HeaderSeat";
+import DocumentOrigin from "../components/DocumentOrigin";
 
 export const DetailContView = ({ idasiento }: { idasiento: string }) => {
 

@@ -293,7 +293,6 @@ const HeaderSeat = (props: Props) => {
                                 label="Fecha de Asiento"
                                 value={dateAsiento}
                                 onChange={handleDateChangeAsiento}
-
                             />
 
                         </Grid>

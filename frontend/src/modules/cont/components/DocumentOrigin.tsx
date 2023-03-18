@@ -116,19 +116,20 @@ console.log(descripcion, dateAsiento)
                                 //defaultValue={headDocument.iddoc}
                                 value={headDocument.iddoc}
                                 variant="standard"
+                                size="small"
                                 InputProps={{
                                     readOnly: true,
                                     inputProps: {
                                         style: {
-                                            fontSize: '15px',
+                                            // fontSize: '15px',
                                             fontWeight: 300 // Tamaño de letra de 16 píxeles (16px)
                                         },
                                     },
                                 }}
                                 InputLabelProps={{
                                     sx: {
-                                        fontSize: '13px',
-                                        transform: 'translate(0px, 4px) scale(1)'
+                                        // fontSize: '13px',
+                                        // transform: 'translate(0px, 4px) scale(1)'
                                     }
                                 }}
                             />

@@ -1,282 +1,389 @@
-import { Container } from "@mui/material";
-import { useState } from "react";
-import { DataTable } from "../../../shared/components/table/DataTable";
+import { AccountBalance as AccountBalanceIcon, AccountCircle as AccountCircleIcon } from "@mui/icons-material";
+import { Box, Card, CardContent, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { TitleBar } from "../../../shared/components/bars/TitleBar";
+import { CardWithBar } from "../../../shared/components/card/CardWithBar";
+import DateInput from "../../../shared/components/inputs/DateInput";
+import { TableBase } from "../../../shared/components/table/TableBase";
+import { BranchIcon } from "../../../shared/icons/BranchIcon";
+import { ExpandIcon } from "../../../shared/icons/ExpandIcon";
+import { MonetaryIcon } from "../../../shared/icons/MonetaryIcon";
 
-interface IAsientoContable {
-  iddoc: number;
-  descasiento: string;
-  refdoc: string;
-  anocont: number;
-  percont: number;
-  fecasiento: string;
-  numpublicacion: number;
-  stsasiento: string;
-  raw_rnum_: number;
-  idasiento?: any;
+export const HeaderSeat = () => {
+  return (
+    <Card>
+      <CardContent>
+        <Grid container spacing={3}>
+          <Grid item lg={6}>
+            <TextField
+              label="Descripcion"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={3}>
+            <TextField
+              label="Estatus"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={1}>
+            <TextField
+              label="Publicacion"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={1}>
+            <TextField
+              label="Numero"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={1}>
+            <TextField
+              label="Tipo"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={1}>
+            <TextField
+              label="Periodo"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={1}>
+            <TextField
+              label="Año"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={2}></Grid>
+          <Grid item lg={3}>
+            <DateInput   
+              slots={{
+                textField: (params) => (
+                  <TextField
+                    {...params}
+                    label="Fecha de Asiento"
+                    fullWidth
+                    size="small"
+                    variant="standard"
+                  />
+                )
+              }}
+            />
+          </Grid>
+          <Grid item lg={2}></Grid>
+          <Grid item lg={3}>
+            <TextField
+              label="Fecha de Documento"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
+  );
+};
+
+export const DocumentOrigin = () => {
+  return (
+    <CardWithBar 
+      title="Documento de origen"
+      headerStartIcon={<BranchIcon fontSize="small" />}
+      >
+      <CardContent>
+        <Grid container alignItems="flex-end" spacing={3}>
+          <Grid item lg={1}>
+            <TextField
+              label="id Doc"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true 
+              }}
+            />
+
+          </Grid>
+          <Grid item lg={2}>
+            <TextField
+              select
+              label="Tipo"
+              fullWidth
+              variant="standard">
+              <MenuItem value="AN002">AN002</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item lg={3}>
+            <TextField
+              label="Tipo"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={2}>
+            <TextField
+              label="Envio"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={2}>
+            <TextField 
+              label="Origen"
+              fullWidth
+              size="small"
+              variant="standard"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={2}>
+            <FormControlLabel 
+              control={
+                <Checkbox color="error" defaultChecked />
+              } 
+              label="Reverso" 
+            />
+          </Grid>
+          <Grid item lg={3}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+              <AccountCircleIcon color="primary" sx={{ mr: 1, my: 0.5 }} />
+              <TextField
+                label="Rif/Cedula" 
+                fullWidth
+                variant="standard"
+                size="small"
+                InputProps={{
+                  readOnly: true
+                }}
+              />
+
+            </Box>
+          </Grid>
+          <Grid item lg={5}>
+            <TextField
+              label="Beneficiario" 
+              fullWidth
+              variant="standard"
+              size="small"
+            />
+          </Grid>
+          <Grid item lg={2}>
+            <TextField
+              label="id. Doc Ref" 
+              fullWidth
+              variant="standard"
+              size="small"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+          <Grid item lg={2}>
+            <TextField
+              label="Referencia" 
+              fullWidth
+              variant="standard"
+              size="small"
+              InputProps={{
+                readOnly: true
+              }}
+            />
+          </Grid>
+        </Grid>
+      </CardContent>
+    </CardWithBar>
+  );
 }
 
-
-
-export const DashboardView = () => {
-  const [asientos] = useState<IAsientoContable[]>([
-    {
-      iddoc: 4514,
-      descasiento: 'PRUEBA DE DEFECTO 4517',
-      refdoc: 'D4517',
-      anocont: 2009,
-      percont: 6,
-      fecasiento: '2009-06-17',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 1,
-      idasiento: null
-    },
-    {
-      iddoc: 3603,
-      descasiento: 'DEPOSITO PARA APERTURAR CUENTA BANCARIA',
-      refdoc: '000100200',
-      anocont: 2008,
-      percont: 12,
-      fecasiento: '2008-12-31',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 2,
-      idasiento: null
-    },
-    {
-      iddoc: 6626,
-      descasiento: 'DEPOSITO PARA APERTURA DE CUENTA MORELIA',
-      refdoc: '123',
-      anocont: 2011,
-      percont: 7,
-      fecasiento: '2011-07-29',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 3,
-      idasiento: null
-    },
-    {
-      iddoc: 6106,
-      descasiento: 'PAGO: Prueba de LOG, COMP, PPTO',
-      refdoc: '5',
-      anocont: 2013,
-      percont: 1,
-      fecasiento: '2013-01-31',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 4,
-      idasiento: null
-    },
-    {
-      iddoc: 6790,
-      descasiento: 'DEPOSITO APERTURA DE CUENTA',
-      refdoc: 'DPE JB',
-      anocont: 2013,
-      percont: 1,
-      fecasiento: '2013-01-05',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 5,
-      idasiento: null
-    },
-    {
-      iddoc: 9151,
-      descasiento: 'PAGO: induccion kerux',
-      refdoc: '107',
-      anocont: 2015,
-      percont: 9,
-      fecasiento: '2015-09-30',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 6,
-      idasiento: null
-    },
-    {
-      iddoc: 9378,
-      descasiento: 'PAGO: PRUEBA EJECUCION FONDO DE ANTICIPOS',
-      refdoc: '585858',
-      anocont: 2016,
-      percont: 6,
-      fecasiento: '2016-06-07',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 7,
-      idasiento: null
-    },
-    {
-      iddoc: 9378,
-      descasiento: 'PAGO: PRUEBA EJECUCION FONDO DE ANTICIPOS',
-      refdoc: '585858',
-      anocont: 2016,
-      percont: 6,
-      fecasiento: '2016-06-07',
-      numpublicacion: 2,
-      stsasiento: 'RCH',
-      raw_rnum_: 8,
-      idasiento: null
-    },
-    {
-      iddoc: 9384,
-      descasiento: 'PAGO: PRUEBA EJECUCION DE FA',
-      refdoc: '442525',
-      anocont: 2016,
-      percont: 6,
-      fecasiento: '2016-06-07',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 9,
-      idasiento: null
-    },
-    {
-      iddoc: 8949,
-      descasiento: 'PAPEL ROTO',
-      refdoc: '103',
-      anocont: 2013,
-      percont: 12,
-      fecasiento: '2013-12-31',
-      numpublicacion: 1,
-      stsasiento: 'RCH',
-      raw_rnum_: 10,
-      idasiento: null
-    }
-  ])
-
+export const MonetaryInfo = () => {
   return (
-    <Container>
-      <DataTable 
-        columns={[
-          { 
-            key: 'id', 
-            title: 'Id Doc',
-            render: (values: IAsientoContable) => {
-              return (
-                <span style={{ fontWeight: 'bold' }}>
-                  {values.iddoc}
-                </span>
-              )
+    <Box display="flex" flexDirection="column" height="100%">
+      <TitleBar startIcon={<MonetaryIcon fontSize="small" />} marginBottom="10px">
+        Information Monetaria
+      </TitleBar>
+      <Card style={{ flexGrow: 1 }}>
+        <CardContent>
+          {/* FORM #2 */}
+        </CardContent>
+      </Card>
+    </Box>
+  )
+}
+
+export const MovimentsTable = () => {
+  return (
+    <TableBase 
+      columns={[
+        {
+          key: 'n',
+          title: 'N',
+          TableHeadCellProps: {
+            style: {
+              border: 0,
             }
           },
-          {
-            key: 'descasiento',
-            title: 'Description',
+          TableBodyCellProps: {
+            style: {
+              fontWeight: 600
+            }
+          }
+        },
+        {
+          key: 'description',
+          title: 'Descripcion',
+          render: (values: any) => {
+            return (
+              <span style={{ display:'inline-flex', alignItems: 'center' }}>
+                {values.description} 
+                <IconButton size="small" style={{ marginLeft: 8 }}>
+                  <ExpandIcon color="primary" style={{ fontSize: '1rem' }} />
+                </IconButton>
+              </span>
+            )
           },
-          {
-            key: 'refdoc',
-            title: 'Referencia',
-          },
-          {
-            key: 'anocont',
-            title: 'Año',
-          },
-          {
-            key: 'percont',
-            title: 'Periodo',
-          },
-          {
-            key: 'fecasiento',
-            title: 'Fecha',
-          },
-          {
-            key: 'numpublicacion',
-            title: 'Publicacion',
-          },
-          {
-            key: 'amount',
-            title: 'Monto',
-          },
-          {
-            key: 'stsasiento',
-            title: 'Status',
-          },
-        ]}
-        data={asientos}
-        pagination={{
-          page: 1,
-          count: 100,
-          onPageChange: () => {},
-          rowsPerPage: 10,
-        }}
-        filters={{
-          onApplyFilter: () => {},
-          onApplySort: () => {},
-          filterOptions: [
-            { 
-              label: 'Id Doc',
-              value: 'id', 
-            },
-            {
-              label: 'Description',
-              value: 'descasiento',
-            },
-            {
-              label: 'Referencia',
-              value: 'refdoc',
-            },
-            {
-              label: 'Año',
-              value: 'anocont',
-            },
-            {
-              label: 'Periodo',
-              value: 'percont',
-            },
-            {
-              label: 'Fecha',
-              value: 'fecasiento',
-            },
-            {
-              label: 'Publicacion',
-              value: 'numpublicacion',
-            },
-            {
-              label: 'Monto',
-              value: 'amount',
-            },
-            {
-              label: 'Status',
-              value: 'stsasiento',
-            },
-          ],
-          sortOptions: [
-            { 
-              label: 'Id Doc',
-              value: 'id', 
-            },
-            {
-              label: 'Description',
-              value: 'descasiento',
-            },
-            {
-              label: 'Referencia',
-              value: 'refdoc',
-            },
-            {
-              label: 'Año',
-              value: 'anocont',
-            },
-            {
-              label: 'Periodo',
-              value: 'percont',
-            },
-            {
-              label: 'Fecha',
-              value: 'fecasiento',
-            },
-            {
-              label: 'Publicacion',
-              value: 'numpublicacion',
-            },
-            {
-              label: 'Monto',
-              value: 'amount',
-            },
-            {
-              label: 'Status',
-              value: 'stsasiento',
-            },
-          ],
-        }}
-      /> 
-    </Container>
+          TableHeadCellProps: {
+            style: {
+              border: 0,
+            }
+          }
+        },
+        {
+          key: 'auxiliar',
+          title: 'Auxiliar',
+          TableHeadCellProps: {
+            style: {
+              border: 0,
+            }
+          }
+        },
+        {
+          key: 'debit',
+          title: 'Debito',
+          TableHeadCellProps: {
+            style: {
+              border: 0,
+            }
+          }
+        },
+        {
+          key: 'credit',
+          title: 'Credito',
+          TableHeadCellProps: {
+            style: {
+              border: 0,
+            }
+          }
+        },
+      ]}
+      data={[
+        {
+          n: 'aja',
+          description: 'Anticipo contractual CTTO...'
+        }
+      ]}
+    />
+  );
+};
+
+export const Moviments = () => {
+  return (
+    <CardWithBar 
+      title="Movimientos"
+      headerStartIcon={<AccountBalanceIcon fontSize="small" />}
+    >
+      <Grid container>
+        <Grid item xs={12} lg={8} xl={9}>
+          <MovimentsTable />
+        </Grid>
+        <Grid item xs={12} lg={4} xl={3}>
+          <CardContent>
+            <Typography>
+              Moneda
+            </Typography>
+            {/* GRUPO DE BOTONES */}
+          </CardContent>
+        </Grid>
+      </Grid>
+    </CardWithBar>
+  );
+};
+
+export const SeatDetails = () => {
+  return (
+    <div>
+      <Grid container spacing={3}>
+        <Grid item xs={12} lg={7} xl={8}>
+          <HeaderSeat />
+          <br />
+          <DocumentOrigin />
+        </Grid>
+        <Grid item xs={12} lg={5} xl={4}>
+          <MonetaryInfo />
+        </Grid>
+        <Grid item xs={12}>
+          <Moviments />
+        </Grid>
+      </Grid>
+    </div>
+  )
+}
+
+export const DashboardView = () => {
+
+  return (
+    <div style={{ paddingLeft: 10, paddingRight: 10 }}>
+      <SeatDetails />
+      {/* <DataTableAssientos asientos={[]} /> */}
+    </div>
   );
 };
