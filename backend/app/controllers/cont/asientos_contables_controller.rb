@@ -76,7 +76,7 @@ class Cont::AsientosContablesController < ApplicationController
         render json: { message: "El Año Contable ya está cerrado." }
       end
 
-      # Se verifica si el ano y periodo del asiento es diferente a la de la fecah del asiento
+      # Se verifica si el año y período del asiento es diferente a la de la fecha del asiento
       if asientos.anocont != nanod || asientos.percont != nperd
         asientos.anocont = nanod
         asientos.percont = nperd
@@ -118,8 +118,17 @@ class Cont::AsientosContablesController < ApplicationController
 
         # Si se guarda bien documentos_origen, enviamos los 2 render
         if documentos_origen.save
+          # Encontramos los datos del movimiento
+          movimientos = Cont::MovimientoContable.where(idasiento: asientos.idasiento)
+          movimientos.each do |m| #Inicia ciclo
+            m.anocont = asientos.anocont
+            m.percont = asientos.percont
+            m.save
+          end #fin del each
+
           render json: { asiento: asientos.as_json,
-                         doc: documentos_origen.as_json }
+                         doc: documentos_origen.as_json,
+                         det: movimientos.as_json}
         else
           render json: documentos_origen.errors.full_messages.first, status: 415
         end
@@ -129,15 +138,71 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
+  # Acción update_movimiento para actualizar los cambios del front-end
+  def update_movimiento
+    # Encontramos el Asientos Contables
+    asientos = Cont::AsientoContable.find_by(idasiento: params[:idasiento])
+
+    # Encontramos el movimiento  
+    movimientos = Cont::MovimientoContable.find_by(idasiento: params[:idasiento], nummov: params[:nummov])
+    # Si el movimiento es nulo hacemos un new, de los contrario un update
+    if movimientos.nil?
+      movimientos_new = Cont::MovimientoContable.new(idasiento: params[:idasiento], nummov: params[:nummov], anocont: asientos.anocont, percont: asientos.percont, 
+        numpublicacion: asientos.numpublicacion, codcuenta: update_movimientos_asiento_params[:codcuenta], 
+        tipoauxiliar: update_movimientos_asiento_params[:tipoauxiliar], codauxiliar: update_movimientos_asiento_params[:codauxiliar],
+        montodb: update_movimientos_asiento_params[:montodb], montocr: update_movimientos_asiento_params[:montocr], 
+        codmoneda: asientos.codmoneda, descmov:  update_movimientos_asiento_params[:descmov])
+
+      if movimientos_new.save
+        render json: movimientos_new.as_json
+      else
+        render json: movimientos_new.errors.full_messages.first, status:415
+      end
+
+    else
+      movimientos.attributes = update_movimientos_asiento_params
+
+      #Evaluamos si el anocont del asiento es diferente al del movimiento
+      if movimientos.anocont != asientos.anocont
+        movimientos.anocont = asientos.anocont
+      end
+  
+      #Evaluamos si el anocont del asiento es diferente al del movimiento
+      if movimientos.percont != asientos.percont
+        movimientos.percont = asientos.percont
+      end
+      
+      #Validar movimiento
+      mensaje = validar_movimiento(movimientos)
+      # Si se guarda bien movimientos
+      if mensaje.nil?
+        if movimientos.save
+          render json: movimientos.as_json
+        else
+          render json: movimientos.errors.full_messages.first, status:415
+        end
+      else
+        render json: { message: mensaje }
+      end
+    end
+  end 
+
+  # Acción delete_movimiento para actualizar los cambios del front-end
+  def delete_movimiento
+    # Encontramos el movimiento  
+    movimientos = Cont::MovimientoContable.find_by(idasiento: params[:idasiento], nummov: params[:nummov])
+    movimientos.destroy
+  end  
+
   #Metodos para los botones de la pantalla
 
-  #Boton para validar asiento
+  #Botón para validar asiento
   def boton_validar
     @movimiento_val = Cont::MovimientoContable.where(idasiento: params[:idasiento])
     validar_asiento(@movimiento_val)
   end
 
-  #Boton para verificar asiento
+  #Botón para verificar asiento
   def boton_verificar
     @movimiento_ver = Cont::MovimientoContable.where(idasiento: params[:idasiento])
     validar_asiento(@movimiento_ver)
@@ -153,22 +218,34 @@ class Cont::AsientosContablesController < ApplicationController
     total_credito = movimiento.sum(:montocr)
     if total_debito == total_credito
       movimiento.each do |m| #Inicia ciclo
-        if m.tipoauxiliar != nil && m.codauxiliar == nil
-          render json: { message: "Debe ingresar un auxiliar a la cuenta." }
-          return
-        end
-        if m.montodb == 0 && m.montocr == 0
-          render json: { message: "El movimiento debe tener monto en débito o en crédito." }
-          return
-        end
-        if m.montodb != 0 && m.montocr != 0
-          render json: { message: "El movimiento sólo puede tener monto en débito o en crédito." }
-          return
-        end
+        mensaje = validar_movimiento(m)
       end #fin del each
-      render json: { message: "Validación Satisfactoria." }
+
+      if mensaje.nil?
+        render json: { message: "Validación Satisfactoria." }
+      else
+        render json: { message: mensaje }
+      end      
     else
       render json: { message: "Los totales del asiento no cuadran." }
+    end
+  end
+
+  #Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
+  def validar_movimiento(detmovimiento)
+    #Evaluamos el tipo auxiliar y código de auxiliar
+    if detmovimiento.tipoauxiliar != nil && detmovimiento.codauxiliar == nil
+      return "Debe ingresar un auxiliar a la cuenta."
+    end
+
+    #Evaluamos que los montos de débito y crédito no sean 0
+    if (detmovimiento.montodb.nil? ? 0 : detmovimiento.montodb) == 0 && (detmovimiento.montocr.nil? ? 0 : detmovimiento.montocr) == 0
+      return "El movimiento debe tener monto en débito o en crédito."
+    end
+
+    #Evaluamos que tenga monto mayor a cero solo el débito o el crédito
+    if (detmovimiento.montodb.nil? ? 0 : detmovimiento.montodb) != 0 && (detmovimiento.montocr.nil? ? 0 : detmovimiento.montocr) != 0
+      return "El movimiento sólo puede tener monto en débito o en crédito."
     end
   end
 
@@ -263,7 +340,10 @@ class Cont::AsientosContablesController < ApplicationController
   end
 
   def update_movimientos_asiento_params
-    params.require(:data_movimiento).permit(:nummov, :anocont, :percont, :numpublicacion,
-                                            :codcuenta, :tipoauxiliar, :codauxiliar, :montodb, :montocr, :codmoneda, :descmov)
+    params.require(:data_movimiento).permit( :anocont,:percont, :numpublicacion, :codcuenta, :tipoauxiliar, 
+                                             :codauxiliar, :montodb, :montocr, :codmoneda, :descmov)
+    rescue ActionController::ParameterMissing => e
+      # Si ocurre un error de parámetro faltante, se retorna un hash vacío
+      {}
   end
 end

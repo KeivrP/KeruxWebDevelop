@@ -17,9 +17,9 @@ module Cont
         
         # Asociaciones con otros modelos
         belongs_to :AsientoContable, foreign_key: "idasiento"
-        belongs_to :AsientoContableUa, foreign_key: "idasiento"
+        #belongs_to :AsientoContableUa, foreign_key: "idasiento"
         belongs_to :CuentaPublicacion, foreign_key: [:numpublicacion, :codcuenta]
-        belongs_to :Auxiliar, foreign_key: [:tipoauxiliar, :codauxiliar]
+        belongs_to :Auxiliar, foreign_key: [:tipoauxiliar, :codauxiliar], optional: true
 
         # Métodos del modelo
         # Método para mostrar la informacion de la cuenta de detalle
@@ -64,8 +64,6 @@ module Cont
                 end
             end
         end
-
-        # Fin de la definición de la clase
-    end
+    end # Fin de la definición de la clase
 end
   
