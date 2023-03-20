@@ -10,8 +10,9 @@ Rails.application.routes.draw do
       get "boton_validar", to: "asientos_contables#boton_validar"
       get "beneficiario", to: "asientos_contables#lst_benefat"
       get "cuentaspub", to: "asientos_contables#lst_cta_pub"
-      get "listauxiar", to: "asientos_contables#lst_cod_axu"
-      get "codauxiliares", to: "asientos_contables#lst_tip_doc_cont"
+      get "codauxiliar", to: "asientos_contables#lst_cod_axu"
+      get "tipodoccont", to: "asientos_contables#lst_tip_doc_cont"
+      get "docreferencia", to: "asientos_contables#lst_doc_referencia"
     end
   end
 end
