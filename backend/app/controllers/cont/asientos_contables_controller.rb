@@ -206,15 +206,10 @@ class Cont::AsientosContablesController < ApplicationController
     else
       movimientos.attributes = update_movimientos_asiento_params
 
-      #Evaluamos si el anocont del asiento es diferente al del movimiento
+      #Evaluamos si el anocont y percont del asiento es diferente al del movimiento
       if movimientos.anocont != asientos.anocont
         movimientos.anocont = asientos.anocont
-      end
-      ###########################################################################################
-      #REvisar estos if pueden ser inecesarios
-      ###########################################################################################
-      #Evaluamos si el periodo del asiento es diferente al del movimiento
-      if movimientos.percont != asientos.percont
+      elsif movimientos.percont != asientos.percont
         movimientos.percont = asientos.percont
       end
 
