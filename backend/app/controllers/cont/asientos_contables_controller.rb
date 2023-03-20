@@ -63,10 +63,10 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
-  # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de COCNT
+  # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de CONT
   def lst_tip_doc_cont
-    # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).where(numpublicacion: params[:numpublicacion], TipoDocumento: {indactivo: "S", codruta: Doc::PasoRuta.select(:codruta).where(tipoevento: 'RCM', codproxsis: 'CONT')})
+    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).select(:desctipodoc, :tipodocref, :indrefdoc)
+                       .where(numpublicacion: params[:numpublicacion], TipoDocumento: {indactivo: "S", codruta: Doc::PasoRuta.select(:codruta).where(tipoevento: 'RCM', codproxsis: 'CONT')})
 
     if !lst_tipodoc_cont.empty?
       render json: lst_tipodoc_cont.as_json
@@ -96,6 +96,18 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
+  # Acción lst_moneda para mostrar una lista de las monedas disponibles
+  def lst_moneda
+    lst_moneda = Kentron::Moneda.joins(:Sitio).where(Sitio: {codsitio: params[:codsitio]}).select(:codmoneda, :nommoneda)
+    .where("(fecvigini is null or fecvigini <= ?) and (fecvigfin is null or fecvigfin >= ?)", params[:fecdoc], params[:fecdoc]).all
+    
+    if !lst_moneda.empty?
+      render json: lst_moneda.as_json
+    else
+      render json: { message: "No se encontraron registros" }
+    end
+  end
+
   # Acción UPDATE para actualizar los cambios del front-end
   def update
     # Encontramos el Asientos Contables
@@ -106,7 +118,7 @@ class Cont::AsientosContablesController < ApplicationController
     if asientos.fecasiento.strftime("%d/%m/%Y") > Time.now.strftime("%d/%m/%Y")
       render json: { message: "La fecha del asiento debe ser menor o igual que la fecha actual." }
     else
-      # Bbuscamos los parametros de control
+      # Buscamos los parametros de control
       controcf = Cont::ControlCf.first
 
       # Determinamos el Año y Periodo a partir de la fecha del asiento
@@ -214,16 +226,16 @@ class Cont::AsientosContablesController < ApplicationController
       end
 
       #Validar movimiento
-      mensaje = validar_movimiento(movimientos)
+      @mensaje = validar_movimiento(movimientos)
       # Si se guarda bien movimientos
-      if mensaje.nil?
+      if @mensaje.nil?
         if movimientos.save
           render json: movimientos.as_json
         else
           render json: movimientos.errors.full_messages.first, status: 415
         end
       else
-        render json: { message: mensaje }
+        render json: { message: @mensaje }
       end
     end
   end
@@ -259,13 +271,13 @@ class Cont::AsientosContablesController < ApplicationController
     total_credito = movimiento.sum(:montocr)
     if total_debito == total_credito
       movimiento.each do |m| #Inicia ciclo
-        mensaje = validar_movimiento(m)
+        @mensaje = validar_movimiento(m)
       end #fin del each
 
-      if mensaje.nil?
+      if @mensaje.nil?
         render json: { message: "Validación Satisfactoria." }
       else
-        render json: { message: mensaje }
+        render json: { message: @mensaje }
       end
     else
       render json: { message: "Los totales del asiento no cuadran." }
