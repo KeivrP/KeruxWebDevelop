@@ -9,98 +9,186 @@ import ButtonSearch from "../../../shared/components/button/ButtonSearch";
 import { IconButtonMenu } from "../../../shared/components/button/IconButtonMenu";
 import FilterButton from "../../../shared/components/button/FilterButton";
 import OrderButton from "../../../shared/components/button/OrderButton";
+import { DataTable } from "../../../shared/components/table/DataTable";
+import { ISeat } from "../../dashboard/seats.-types";
 
 interface Filter {
   column: string;
   value: string;
 }
-export const ContView = () => {
+
+export interface DataTableContSeat {
+  asientos?: ISeat[]
+}
+
+export const ContView= ({
+  asientos
+}: DataTableContSeat) => {
   const seat = useAppSelector((state) => state.cont.seat)
   const loadingSeat = useAppSelector((state) => state.cont.loadingSeat)
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
+
+  const [asiento, setAseinto] = useState<any[]>([])
 
   const dispatch = useAppDispatch();
 
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  const goBack = () => {
-    // lógica del botón
-  };
 
   useEffect(() => {
     dispatch(getContAction())
-
   }, [])
 
+  useEffect(()=>{
+    if(seat != null){
+      setAseinto(seat)
+    }
+  },[seat])
 
-  const columns = [
-    { id: 'iddoc', label: 'Id Doc.', width: '100px' },
-    { id: 'descasiento', label: 'Descripción', width: '200px' },
-    { id: 'refdoc', label: 'Referencia', width: '100px' },
-    { id: 'anocont', label: 'Año', width: '60px' },
-    { id: 'percont', label: 'Período', width: '80px' },
-    { id: 'fecasiento', label: 'Fecha', width: '100px' },
-    { id: 'numpublicacion', label: 'Publicación', width: '80px' },
-    { id: 'name', label: 'Monto', width: '100px' },
-    { id: 'stsasiento', label: 'Estatus', width: '100px' },
-  ];
-  const handleApplyFilters = (filters: Filter[]) => {
-    // logic to apply filters
+  const handleRowClick = (index: number) => {
+    setSelectedRowIndex(index);
   };
-  const headerColumns = columns.map(column => column.label);
+
+
+ 
   return (
     <>
-      <Header headerTitle="Asientos por codificar" buttonAction={goBack} />
+      <Header headerTitle="Asientos por codificar" /* buttonAction={goBack} */ />
       <div className="my-div">
-        <Box
-          height={40} // Establece la altura en 100px
-          bgcolor="#FFFFFF"
-          border={1}
-          borderColor="#FFFFFF"
-          boxShadow={3}
-          borderRadius={1}
-        >
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={6}>
-              <ButtonSearch />
-            </Grid>
-            <Grid item xs={6} style={{ textAlign: 'right' }}>
-              <FilterButton columns={headerColumns} onApplyFilter={handleApplyFilters} />
-              <OrderButton columns={headerColumns} onApplyFilter={handleApplyFilters} />
-            </Grid>
-          </Grid>
-        </Box>
-        {!loadingSeat && <CustomTable columns={columns} rows={seat} headerColumns={['iddoc']} maxChar={20} />}
-        <div className="my-pagination">
-          <Box flex="1" />
-          <Box>
-            <TablePagination
-              component="div"
-              count={100}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[10, 25, 50, 100]}
-              labelRowsPerPage="Filas por página"
-              labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-            />
-          </Box>
-        </div>
+      <DataTable
+        columns={[
+          { 
+            key: 'id', 
+            title: 'Id Doc',
+            render: (values: ISeat) => {
+              return (
+                <span style={{ fontWeight: 'bold' }}>
+                  {values.iddoc}
+                </span>
+              )
+            }
+          },
+          {
+            key: 'descasiento',
+            title: 'Description',
+          },
+          {
+            key: 'refdoc',
+            title: 'Referencia',
+          },
+          {
+            key: 'anocont',
+            title: 'Año',
+          },
+          {
+            key: 'percont',
+            title: 'Periodo',
+          },
+          {
+            key: 'fecasiento',
+            title: 'Fecha',
+          },
+          {
+            key: 'numpublicacion',
+            title: 'Publicacion',
+          },
+          {
+            key: 'amount',
+            title: 'Monto',
+          },
+          {
+            key: 'stsasiento',
+            title: 'Status',
+          },
+        ]}
+        //onRowClick={handleRowClick}
+        data={asiento}
+        pagination={{
+          page: 1,
+          count: 100,
+          onPageChange: () => {},
+          rowsPerPage: 10,
+        }}
+        filters={{
+          onApplyFilter: () => {},
+          onApplySort: () => {},
+          filterOptions: [
+            { 
+              label: 'Id Doc',
+              value: 'id', 
+            },
+            {
+              label: 'Description',
+              value: 'descasiento',
+            },
+            {
+              label: 'Referencia',
+              value: 'refdoc',
+            },
+            {
+              label: 'Año',
+              value: 'anocont',
+            },
+            {
+              label: 'Periodo',
+              value: 'percont',
+            },
+            {
+              label: 'Fecha',
+              value: 'fecasiento',
+            },
+            {
+              label: 'Publicacion',
+              value: 'numpublicacion',
+            },
+            {
+              label: 'Monto',
+              value: 'amount',
+            },
+            {
+              label: 'Status',
+              value: 'stsasiento',
+            },
+          ],
+          sortOptions: [
+            { 
+              label: 'Id Doc',
+              value: 'id', 
+            },
+            {
+              label: 'Description',
+              value: 'descasiento',
+            },
+            {
+              label: 'Referencia',
+              value: 'refdoc',
+            },
+            {
+              label: 'Año',
+              value: 'anocont',
+            },
+            {
+              label: 'Periodo',
+              value: 'percont',
+            },
+            {
+              label: 'Fecha',
+              value: 'fecasiento',
+            },
+            {
+              label: 'Publicacion',
+              value: 'numpublicacion',
+            },
+            {
+              label: 'Monto',
+              value: 'amount',
+            },
+            {
+              label: 'Status',
+              value: 'stsasiento',
+            },
+          ],
+        }}
 
+      /> 
       </div>
       {/* {loadingSeat ? 'loading...' : null}
       <pre>

@@ -52,7 +52,7 @@ export const MonetaryInfo = ({
     if(showCoin === MonetaryInfoEnum.document) return null;
     return (
       <>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           <TextField 
             label="Tasa"
             fullWidth
@@ -66,7 +66,7 @@ export const MonetaryInfo = ({
             }}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={3}>
           <TextField 
             label="Moneda Original"
             fullWidth
@@ -80,7 +80,7 @@ export const MonetaryInfo = ({
             }}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <TextField 
             label="Monto Original"
             fullWidth

@@ -2,6 +2,7 @@ import { Grid, Skeleton } from "@mui/material"
 import { useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
+import Header from "../../../shared/layout/header"
 import { useAppDispatch } from "../../../store/hooks"
 import { DocumentOrigin } from "../components/DocumentOrigin"
 import { HeaderSeat } from "../components/HeaderSeat"
@@ -43,7 +44,7 @@ export const SeatDetailsView = () => {
   }, [getSeatDetails]);
 
   useEffect(() => {
-    if(seatDetails) {
+    if (seatDetails) {
       reset({
         cabasiento: {
           descasiento: seatDetails.cabasiento.descasiento,
@@ -63,21 +64,28 @@ export const SeatDetailsView = () => {
     }
   }, [seatDetails, reset])
 
+  console.log("seatDetails", seatDetails)
+
   return (
-    <form onSubmit={handleSubmit((newValues) => console.log('newValues', newValues))}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} lg={8} xl={9}>
-          <HeaderSeat control={control} />
-          <br />
-          <DocumentOrigin control={control} />
-        </Grid>
-        <Grid item xs={12} lg={4} xl={3}>
-          <MonetaryInfo control={control} />
-        </Grid>
-        <Grid item xs={12}>
-          <Moviments />
-        </Grid>
-      </Grid>
-    </form>
+    <>
+      <Header headerTitle="Codificar asiento contable: # "/*  buttonAction={goBack} */ />
+      <form onSubmit={handleSubmit((newValues) => console.log('newValues', newValues))}>
+        <div className="my-div">
+          <Grid container spacing={2}>
+            <Grid item xs={12} lg={8} xl={9}>
+              <HeaderSeat control={control} />
+              <div style={{ marginBottom: '16px' }}></div>
+              <DocumentOrigin control={control} />
+            </Grid>
+            <Grid item xs={12} lg={4} xl={3}>
+              <MonetaryInfo control={control} />
+            </Grid>
+            <Grid item xs={12}>
+              <Moviments control={control}/>
+            </Grid>
+          </Grid>
+        </div>
+      </form>
+    </>
   )
 }

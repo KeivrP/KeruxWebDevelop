@@ -84,7 +84,7 @@ export const DetailContView = ({ idasiento }: { idasiento: string }) => {
 
     return (
         <>
-            <Header headerTitle="Codificar asiento contable: # " buttonAction={goBack} />
+            <Header headerTitle="Codificar asiento contable: # " /* buttonAction={goBack} */ />
             <div className="my-div">
 
                 {/*Primer Grid que dividira la pantalla en dos partes*/}
