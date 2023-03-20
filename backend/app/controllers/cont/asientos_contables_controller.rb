@@ -19,21 +19,21 @@ class Cont::AsientosContablesController < ApplicationController
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
     render json: { cabasiento: @asiento.as_json(methods: json_default_asiento),
                    cabdocumento: @documento.as_json(methods: json_default_documento),
-                   detasiento: @movimiento_contable.as_json(methods: json_default_detasiento) }
+                   detasiento: @movimiento_contable.as_json(methods: json_default_detasiento)}
   end
-
+  
+  # Acción lst_benefat para mostrar una lista de beneficiarios activos
   def lst_benefat
     lst_benef_activo = Doc::VBenefActivo.all.map do |benef|
       {
         nombre: benef.nombre,
-        numbened: benef.numbenef,
+        numbenef: benef.numbenef,
         rifbenef: "#{benef.letraid}-#{benef.numid}",
       }
     end
-    # byebug
+
     if !lst_benef_activo.empty?
-      render json: { lstBenef: lst_benef_activo.as_json }
-      #(methods: json_lst_benef_activo) }
+      render json: lst_benef_activo.as_json
     else
       render json: { message: "No se encontraron registros" }
     end
@@ -42,10 +42,10 @@ class Cont::AsientosContablesController < ApplicationController
   # Acción lst_cta_pub para mostrar una lista de cuentas de la publicacón
   def lst_cta_pub
     lst_cta_publicacion = Cont::CuentaPublicacion.select(:codcuenta, :desccuenta, :tipoauxiliar)
-      .where(numpublicacion: params[:numpublicacion], tipo: "D")
+      .where(numpublicacion: params[:numpublicacion], tipo: "D").all
+
     if !lst_cta_publicacion.empty?
-      # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-      render json: { lstctapub: lst_cta_publicacion.as_json }
+      render json: lst_cta_publicacion.as_json
     else
       render json: { message: "No se encontraron registros" }
     end
@@ -54,11 +54,10 @@ class Cont::AsientosContablesController < ApplicationController
   # Acción lst_cod_axu para mostrar una lista de códigos de auxiliares
   def lst_cod_axu
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    lst_cod_auxiliar = Cont::Auxiliar.select(:codauxiliar, :descauxiliar)
-      .where(tipoauxiliar: params[:tipoauxiliar], indactivo: "D")
+    lst_cod_auxiliar = Cont::Auxiliar.select(:codauxiliar, :descauxiliar).where(tipoauxiliar: params[:tipoauxiliar], indactivo: "S")
+
     if !lst_cod_auxiliar.empty?
-      # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-      render json: { lstcodaxu: lst_cod_auxiliar.as_json }
+      render json: lst_cod_auxiliar.as_json
     else
       render json: { message: "No se encontraron registros" }
     end
@@ -67,11 +66,31 @@ class Cont::AsientosContablesController < ApplicationController
   # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de COCNT
   def lst_tip_doc_cont
     # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    lst_tipodoc_cont = Cont::DefEventoCf.select(:tipodoc).first.TipoDocumento
+    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).where(numpublicacion: params[:numpublicacion], TipoDocumento: {indactivo: "S", codruta: Doc::PasoRuta.select(:codruta).where(tipoevento: 'RCM', codproxsis: 'CONT')})
 
     if !lst_tipodoc_cont.empty?
-      # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-      render json: { lstcodaxu: lst_tipodoc_cont.as_json }
+      render json: lst_tipodoc_cont.as_json
+    else
+      render json: { message: "No se encontraron registros" }
+    end
+  end
+
+   # Acción lst_doc_ref para mostrar una lista de los documentos de referencia
+   def lst_doc_referencia
+    if params[:indreverso] = "S" || params[:indrefdoc] = "S" 
+      if  params[:tipodocref].nil?
+        lst_doc_referencia = Doc::DocumentoOrigen
+          .select(:iddoc, :descdoc, :numbenef)
+          .where(numbenef: [params[:numbenef], 99999999]).all
+      else
+        lst_doc_referencia = Doc::DocumentoOrigen
+          .select(:iddoc, :descdoc, :numbenef)
+         .where(tipodoc: params[:tipodocref], numbenef: [params[:numbenef], 99999999]).all
+      end
+    end
+
+    if !lst_doc_referencia.empty?
+      render json: lst_doc_referencia.as_json
     else
       render json: { message: "No se encontraron registros" }
     end
@@ -193,8 +212,8 @@ class Cont::AsientosContablesController < ApplicationController
       end
       ###########################################################################################
       #REvisar estos if pueden ser inecesarios
-      ##############################################################################################333
-      #Evaluamos si el anocont del asiento es diferente al del movimiento
+      ###########################################################################################
+      #Evaluamos si el periodo del asiento es diferente al del movimiento
       if movimientos.percont != asientos.percont
         movimientos.percont = asientos.percont
       end
@@ -324,13 +343,6 @@ class Cont::AsientosContablesController < ApplicationController
       dsp_DesCtaPub
       dsp_DescAuxiliar
       dsp_CuentaPadre
-    ]
-  end
-
-  # Para la lista de Beneficiarios Activo
-  def json_lst_benef_activo
-    %i[
-      rifbenefact
     ]
   end
 

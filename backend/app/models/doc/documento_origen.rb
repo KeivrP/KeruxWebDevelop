@@ -41,7 +41,8 @@ module Doc
     # Métodos del modelo
     # Método para mostrar el tipo de documento
     def dsp_desctipodoc
-      self.TipoDocumento.try(:desctipodoc)
+      #self.TipoDocumento.try(:desctipodoc)
+      tipodoc = Doc::TipoDocumento.select(:tipodoc, :desctipodoc, :tipodocref, :indrefdoc).where(tipodoc: self.tipodoc).first
     end
 
     #Validaciones
