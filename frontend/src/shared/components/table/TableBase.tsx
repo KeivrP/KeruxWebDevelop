@@ -5,7 +5,9 @@ import { Table,
   TableCell, 
   tableCellClasses, 
   TableHead, 
-  TableCellProps as MuiTableCellProps  } from "@mui/material"
+  TableCellProps as MuiTableCellProps,
+  TableFooter
+} from "@mui/material"
 import { ObjectAny } from "../../types/global.types";
 import styled from "@emotion/styled";
 
@@ -30,14 +32,22 @@ export interface TableColumn {
   TableBodyCellProps?: Omit<MuiTableCellProps, 'children' | 'key'>;
 }
 
+export interface TableFooterColumn {
+  value: string | number;
+  render?: (data: any[]) => JSX.Element;  
+  TableCellProps?: Omit<MuiTableCellProps, 'children' | 'key'>;
+}
+
 export interface TableBaseProps {
   columns: TableColumn[];
-  data: ObjectAny[]
+  data: ObjectAny[];
+  footerColumns?: TableFooterColumn[]
 }
 
 export const TableBase = ({
   columns,
-  data
+  data,
+  footerColumns
 }: TableBaseProps) => {
   const headCells = useMemo(() =>
     columns.map(({ title, key, TableHeadCellProps = {} }) => {
@@ -64,6 +74,23 @@ export const TableBase = ({
     })
   , [columns, data]);
 
+  const footer = useMemo(() => {
+    if(footerColumns) {
+      return (
+        <TableFooter>
+          <TableRow>
+            {footerColumns.map(({ value, render, TableCellProps }, i) => (
+              <TableCell key={`table-cell-${i+1}`} {...TableCellProps}>
+                  {render ? render(data) : value}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableFooter>
+      )
+    }
+    return null;
+  }, [footerColumns, data])
+
   return (
     <Table>
       <TableHead>
@@ -74,6 +101,7 @@ export const TableBase = ({
       <TableBody>
         {bodyRows}
       </TableBody>
+      {footer}
     </Table>
   )
 }

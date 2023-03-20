@@ -1,17 +1,5 @@
 import { DataTable } from "../../../shared/components/table/DataTable";
-
-interface ISeat {
-  iddoc: number;
-  descasiento: string;
-  refdoc: string;
-  anocont: number;
-  percont: number;
-  fecasiento: string;
-  numpublicacion: number;
-  stsasiento: string;
-  raw_rnum_: number;
-  idasiento?: any;
-}
+import { ISeat } from "../seats.-types";
 
 export interface DataTableAssientosProps {
   asientos: ISeat[]
