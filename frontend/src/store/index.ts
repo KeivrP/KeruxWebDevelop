@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { contSlice } from '../modules/cont/cont-slice'
+import { seatSlice } from '../modules/dashboard/seats-slice'
 
 export const store = configureStore({
   reducer: {
-    cont: contSlice.reducer
+    cont: contSlice.reducer,
+    seat: seatSlice.reducer
   },
 })
 

@@ -1,13 +1,21 @@
 import { Button, Grid, IconButton, Box, Typography } from '@mui/material';
 import logo from './image/KERUX.png';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useNavigate } from 'react-router-dom';
 
 type HeaderProps = {
   headerTitle: string;
-  buttonAction: () => void;
+  //buttonAction: () => void;
 };
 
-const Header = ({ headerTitle, buttonAction }: HeaderProps) => {
+
+const Header = ({ headerTitle, /* buttonAction */ }: HeaderProps) => {
+
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
   return (
     <Box
     sx={{
@@ -42,7 +50,7 @@ const Header = ({ headerTitle, buttonAction }: HeaderProps) => {
               width: 'fit-content',
               margin: '0 auto',
             }}
-            onClick={buttonAction}
+            onClick={goBack}
           >
             <ArrowBackIosNewIcon sx={{ fontSize: 'small', margin: '0 8px' }} />
           </Box>

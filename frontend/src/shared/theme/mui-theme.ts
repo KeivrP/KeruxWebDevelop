@@ -1,33 +1,14 @@
-import { createTheme, PaletteOptions, ThemeOptions } from "@mui/material/styles";
-import { esES } from "@mui/material/locale";
-
-interface MyPaletteOptions extends PaletteOptions {
-  save: {
-    main: string;
-    light?: string;
-    dark?: string;
-  };
-}
-
-interface MyThemeOptions extends ThemeOptions {
-  components?: {
-    MuiTableRow?: {
-      styleOverrides?: {
-        root?: {
-          height?: number;
-        };
-      };
-    };
-  };
-}
+import { createTheme } from "@mui/material/styles";
 
 export const muiTheme = createTheme({
   components: {
     MuiTableCell: {
       styleOverrides: {
+        head: {
+          color: '#767676',
+        },
         root: {
           padding: "8px",
-         // fontSize: "0.9rem",
         },
       },
     },
@@ -78,19 +59,9 @@ export const muiTheme = createTheme({
       light: '#85051f',
       dark: '#cb3957',
     },
-    save: {
-      main: '#3F51B5',
-      light: '#757de8',
-      dark: '#002984',
-    },
-    cancel: {
-      main: '#3F51B5',
-      light: '#757de8',
-      dark: '#002984',
-    },
     background: {
       default: "#F8F8FA",
     },
-  } as MyPaletteOptions,
+  },
   // Asegurarse de usar MyPaletteOptions para extender la interfaz de PaletteOptions
-} as MyThemeOptions);
+});
