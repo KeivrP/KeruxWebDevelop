@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get "codauxiliar", to: "asientos_contables#lst_cod_axu"
       get "tipodoccont", to: "asientos_contables#lst_tip_doc_cont"
       get "docreferencia", to: "asientos_contables#lst_doc_referencia"
+      get "moneda", to: "asientos_contables#lst_moneda"
     end
   end
 end
