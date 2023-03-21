@@ -13,7 +13,7 @@ import { useAppSeat } from "../seats-hooks"
 import { ISeatParamsUpdate, IUpdateSeatInput, SeatReversoEnum } from "../seats.-types"
 
 export const SeatDetailsView = () => {
-  const { control, reset, handleSubmit } = useForm<IUpdateSeatInput>({
+  const { control, reset, getValues } = useForm<IUpdateSeatInput>({
     defaultValues: {
       cabasiento: {
         descasiento: '',
@@ -39,7 +39,8 @@ export const SeatDetailsView = () => {
     distpatch(fetchSeatDetailsAction(id as string))
   }, [id, distpatch])
 
-  const updateSeat = useCallback((newValues: IUpdateSeatInput) => {
+  const updateSeat = useCallback(() => {
+    const newValues = getValues();
     // TODO: REMPLAZAR POR NEW VALUES
     if (seatDetails != null) {
       const updateInput: ISeatParamsUpdate = {
@@ -80,7 +81,7 @@ export const SeatDetailsView = () => {
       console.log('updateInput', updateInput);
       // distpatch(updateSeatAction(updateInput));
     }
-  } , [distpatch, seatDetails])
+  } , [getValues, seatDetails])
 
   useEffect(() => {
     getSeatDetails()
@@ -110,23 +111,21 @@ export const SeatDetailsView = () => {
   return (
     <>
       <Header headerTitle="Codificar asiento contable: # "/*  buttonAction={goBack} */ />
-      <form onSubmit={handleSubmit(updateSeat)}>
-        <div className="my-div">
-          <Grid container spacing={2}>
-            <Grid item xs={12} lg={8} xl={9}>
-              <HeaderSeat control={control} />
-              <div style={{ marginBottom: '16px' }}></div>
-              <DocumentOrigin control={control} />
-            </Grid>
-            <Grid item xs={12} lg={4} xl={3}>
-              <MonetaryInfo control={control} />
-            </Grid>
-            <Grid item xs={12}>
-              <Moviments control={control}/ >
-            </Grid>
+      <div className="my-div">
+        <Grid container spacing={2}>
+          <Grid item xs={12} lg={8} xl={9}>
+            <HeaderSeat control={control} />
+            <div style={{ marginBottom: '16px' }}></div>
+            <DocumentOrigin control={control} />
           </Grid>
-        </div>
-      </form>
+          <Grid item xs={12} lg={4} xl={3}>
+            <MonetaryInfo control={control} />
+          </Grid>
+          <Grid item xs={12}>
+            <Moviments control={control} onSave={updateSeat}/>
+          </Grid>
+        </Grid>
+      </div>
     </>
   )
 }

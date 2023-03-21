@@ -28,7 +28,7 @@ export const ContView = ({
   const loadingSeat = useAppSelector((state) => state.cont.loadingSeat)
   const navigate = useNavigate();
 
-  const [page, setPage] = React.useState(2);
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -39,8 +39,7 @@ export const ContView = ({
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    console.log(parseInt(event.target.value, 10))
+    setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
@@ -51,7 +50,7 @@ export const ContView = ({
 
   useEffect(() => {
     dispatch(getContAction())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (seat != null) {
@@ -220,13 +219,12 @@ export const ContView = ({
            ]}
           //onRowClick={handleRowClick}
           data={asiento}
-          pagination={{
-            page: 1,
+          PaginationProps={{
+            page,
             count: 100,
             onPageChange: handleChangePage,
-            rowsPerPage: 1,
+            rowsPerPage,
             onRowsPerPageChange: handleChangeRowsPerPage
-
           }}
           filters={{
             onApplyFilter: () => { },

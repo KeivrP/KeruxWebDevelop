@@ -31,7 +31,7 @@ export const DocumentOrigin = ({
 
   useEffect(() => {
     distpatch(fetchBeneficiaryAction())
-  }, [])
+  }, [distpatch])
 
 
 

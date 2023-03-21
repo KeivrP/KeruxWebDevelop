@@ -5,14 +5,14 @@ import { TableFilter, TableFilterProps } from "./TableFilter"
 import { TablePagination, TablePaginationProps } from "./TablePagination"
 
 export interface DataTableProps extends TableBaseProps {
-  pagination: Omit<TablePaginationProps, 'component'>,
+  PaginationProps: Omit<TablePaginationProps, 'component'>,
   filters: TableFilterProps,
 }
 
 export const DataTable = ({
   data,
   columns,
-  pagination,
+  PaginationProps,
   filters
 }: DataTableProps) => {
   return (
@@ -29,10 +29,7 @@ export const DataTable = ({
       />
       <Box display="flex" justifyContent="flex-end">
         <TablePagination
-          page={pagination.page}
-          count={pagination.count}
-          onPageChange={pagination.onPageChange}
-          rowsPerPage={pagination.rowsPerPage}  
+          {...PaginationProps}
         />
       </Box>
     </TableContainer>

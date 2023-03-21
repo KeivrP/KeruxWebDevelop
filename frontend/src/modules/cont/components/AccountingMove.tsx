@@ -64,7 +64,7 @@ export const AccountingMove = () => {
 
                 ]}
                 data={asientos}
-                pagination={{
+                PaginationProps={{
                     page: 1,
                     count: 100,
                     onPageChange: () => { },

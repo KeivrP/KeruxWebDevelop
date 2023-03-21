@@ -23,11 +23,13 @@ import { ISeatParamsUpdate, IUpdateSeatInput } from "../seats.-types";
 import { MovimentsTable } from "./MovimentsTable";
 
 export interface MovimientsProps {
-  control: Control<IUpdateSeatInput, any>
+  control: Control<IUpdateSeatInput, any>,
+  onSave: () => void;
 }
 
 export const Moviments = ({
-  control
+  control,
+  onSave
 }: MovimientsProps) => {
   const { id: seatId } = useParams<{ id: string }>()
   const values = useWatch({ control })
@@ -111,7 +113,7 @@ export const Moviments = ({
                   </Grid>
                   <Grid item xs={12}>
                     <Button
-                      type="submit"
+                      onClick={onSave}
                       fullWidth
                       variant="contained"
                       color="inherit">
