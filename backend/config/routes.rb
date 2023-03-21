@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       post "update_movimiento", to: "asientos_contables#update_movimiento"
       post "delete_movimiento", to: "asientos_contables#delete_movimiento"
       get "boton_validar", to: "asientos_contables#boton_validar"
+      get "boton_verificar", to: "asientos_contables#boton_verificar"
       get "beneficiario", to: "asientos_contables#lst_benefat"
       get "cuentaspub", to: "asientos_contables#lst_cta_pub"
       get "codauxiliar", to: "asientos_contables#lst_cod_axu"
