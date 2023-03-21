@@ -1,5 +1,6 @@
 import { AccountCircle as AccountCircleIcon } from "@mui/icons-material";
 import {
+  Autocomplete,
   Box,
   CardContent,
   Checkbox,
@@ -74,7 +75,7 @@ export const DocumentOrigin = ({
         <Grid container alignItems="flex-end" spacing={3}>
           <Grid item lg={1}>
             <TextField
-              label="id Doc"
+              label="Id Doc"
               fullWidth
               size="small"
               variant="standard"
@@ -115,7 +116,7 @@ export const DocumentOrigin = ({
           </Grid>
           <Grid item lg={2}>
             <TextField
-              label="Envio"
+              label="Envío"
               fullWidth
               size="small"
               variant="standard"
@@ -159,7 +160,7 @@ export const DocumentOrigin = ({
             <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
               <AccountCircleIcon color="primary" sx={{ mr: 1, my: 0.5 }} />
               <TextField
-                label="Rif/Cedula"
+                label="Rif/Cédula"
                 fullWidth
                 variant="standard"
                 size="small"
@@ -172,28 +173,28 @@ export const DocumentOrigin = ({
             </Box>
           </Grid>
           <Grid item lg={5}>
-            <TextField
-              label="Beneficiario"
-              fullWidth
-              variant="standard"
-              size="small"
-              select
-              value={nombreNefCtrl.field.value}
-              onChange={nombreNefCtrl.field.onChange}
-              InputProps={{
-                readOnly: !canEdit
-              }}
-            >
-              {seatBeneficiary.map((bene) => (
-                <MenuItem key={bene.numbenf} value={bene.numbenf}>
-                  {bene.nombre}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              options={seatBeneficiary}
+              getOptionLabel={(option) => option.nombre}
+              onChange={(event, value) => nombreNefCtrl.field.onChange(value?.nombre || "")}
+              value={seatBeneficiary.find((bene) => bene.nombre === nombreNefCtrl.field.value) || null}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Beneficiario"
+                  fullWidth
+                  variant="standard"
+                  size="small"
+                  InputProps={{
+                    readOnly: !canEdit
+                  }}
+                />
+              )}
+            />
           </Grid>
           <Grid item lg={2}>
             <TextFieldEditable
-              label="id. Doc Ref"
+              label="Id. Doc Ref"
               fullWidth
               variant="standard"
               size="small"

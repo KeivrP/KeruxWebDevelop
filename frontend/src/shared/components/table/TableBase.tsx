@@ -92,16 +92,19 @@ export const TableBase = ({
   }, [footerColumns, data])
 
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          {headCells}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {bodyRows}
-      </TableBody>
-      {footer}
-    </Table>
+    <div style={{ maxHeight: '60vh', overflowY: data.length > 10 ? 'auto' : 'initial' }}>    
+     
+     <Table>
+        <TableHead>
+          <TableRow>
+            {headCells}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {bodyRows}
+        </TableBody>
+        {footer}
+      </Table>
+    </div>
   )
 }

@@ -188,6 +188,7 @@ export const MovimentsTable = () => {
     )
   , [newMoviments]);
 
+
   return (
     <Box display="flex" flexDirection="column">
       <TableContainer>
@@ -195,10 +196,10 @@ export const MovimentsTable = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center">N°</TableCell>
-              <TableCell align="center">Descripcion</TableCell>
+              <TableCell align="center">Descripción</TableCell>
               <TableCell align="center">Auxiliar	</TableCell>
-              <TableCell align="center">Debito</TableCell>
-              <TableCell align="center">Credito</TableCell>
+              <TableCell align="center">Débito</TableCell>
+              <TableCell align="center">Crédito</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -212,10 +213,10 @@ export const MovimentsTable = () => {
                 Totales
               </TableCell>
               <TableCell align="center">
-                48.000,00 Bs
+                0 Bs
               </TableCell>
               <TableCell align="center">
-                72.000,00 Bs
+                0 Bs
               </TableCell>
             </TableRow>
           </TableFooter>

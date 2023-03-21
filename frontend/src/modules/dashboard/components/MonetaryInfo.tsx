@@ -68,21 +68,7 @@ export const MonetaryInfo = ({
     if (showCoin === MonetaryInfoEnum.document) return null;
     return (
       <>
-        <Grid item xs={3}>
-          <TextField
-            label="Tasa"
-            fullWidth
-            variant="standard"
-            value={seatDetails?.cabdocumento.tasa}
-            InputProps={{
-              readOnly: true,
-              style: {
-                fontWeight: 600
-              }
-            }}
-          />
-        </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12}>
           <TextField
             label="Moneda Original"
             fullWidth
@@ -96,6 +82,21 @@ export const MonetaryInfo = ({
             }}
           />
         </Grid>
+        <Grid item xs={6}>
+          <TextField
+            label="Tasa"
+            fullWidth
+            variant="standard"
+            value={seatDetails?.cabdocumento.tasa}
+            InputProps={{
+              readOnly: true,
+              style: {
+                fontWeight: 600
+              }
+            }}
+          />
+        </Grid>
+
         <Grid item xs={6}>
           <TextField
             label="Monto Original"
@@ -121,7 +122,7 @@ export const MonetaryInfo = ({
   return (
     <Box display="flex" flexDirection="column" height="100%">
       <TitleBar startIcon={<MonetaryIcon fontSize="small" />} marginBottom="10px">
-        Information Monetaria
+        Información Monetaria
       </TitleBar>
       <Card style={{ flexGrow: 1 }}>
         <CardContent>
@@ -135,6 +136,7 @@ export const MonetaryInfo = ({
                 </RadioGroup>
               </FormControl>
             </Grid>
+            {origenInputs}
             <Grid item xs={12}>
               <TextFieldEditable
                 label="Monto del Documento"
@@ -156,23 +158,17 @@ export const MonetaryInfo = ({
                 label="Moneda del Documento"
                 fullWidth
                 variant="standard"
-                select
-                value={codMonedaToDocCtrl.field.value}
-                onChange={codMonedaToDocCtrl.field.onChange}
+                value={seatDetails?.cabdocumento.codmonedamtodoc}
                 InputProps={{
-                  readOnly: !canEdit,
+                  readOnly: true,
                   style: {
                     fontWeight: 600
                   }
-                }}>
-                {seatLstMoneda.map((moneda) => (
-                  <MenuItem key={moneda.codmoneda} value={moneda.codmoneda}>
-                    {moneda.nommoneda}
-                  </MenuItem>
-                ))}
-              </TextField>
+                }}
+                
+             />
             </Grid>
-            {origenInputs}
+           
           </Grid>
         </CardContent>
       </Card>

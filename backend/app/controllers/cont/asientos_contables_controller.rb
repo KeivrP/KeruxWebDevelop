@@ -4,13 +4,15 @@ class Cont::AsientosContablesController < ApplicationController
 
   # Acción index para listar los registros de la tabla
   def index
-    # Seleccionar los campos deseados de la tabla y paginar el resultado
-    asiento = Cont::AsientoContableUa
-      .select(:iddoc, :descasiento, :idasiento, :refdoc, :anocont, :percont, :fecasiento, :numpublicacion, :stsasiento)
-      .where(stsasiento: ["REC", "RCH"])
+    # Seleccionar los campos deseados de la tabla y paginar el resultado   
+    plsql.proc_ctx_uejeproc.set_undadmpro("ROBERTO")
+
+    asiento = Cont::AsientoContable.joins(:DocumentoOrigen)
+      .select(:iddoc, :idasiento, :descasiento, :refdoc, :anocont, :percont, :fecasiento, :numpublicacion, :stsasiento)
+      .where(stsasiento: ["REC", "RCH"], DocumentoOrigen: { codundadmpro: plsql.proc_ctx_uejeproc.get_undadmpro })
       .page(params[:page])
-      .per(10)
-      .order(idasiento: :desc)
+      .per(params[:per])
+      .order(iddoc: :desc)
     # Renderizar los resultados como JSON, incluyendo los métodos por defecto
     render json: asiento.as_json(methods: json_default_asiento_mto)
   end
@@ -66,7 +68,7 @@ class Cont::AsientosContablesController < ApplicationController
 
   # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de CONT
   def lst_tip_doc_cont
-    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).select(:desctipodoc, :tipodocref, :indrefdoc)
+    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).select(:tipodoc, :desctipodoc, :tipodocref, :indrefdoc)
       .where(numpublicacion: params[:numpublicacion], TipoDocumento: { indactivo: "S", codruta: Doc::PasoRuta.select(:codruta).where(tipoevento: "RCM", codproxsis: "CONT") })
 
     if !lst_tipodoc_cont.empty?
@@ -185,9 +187,7 @@ class Cont::AsientosContablesController < ApplicationController
             m.save
           end #fin del each
 
-          render json: { asiento: asientos.as_json,
-                         doc: documentos_origen.as_json,
-                         det: movimientos.as_json }
+          render json: { message: "Asiento guardado con éxito." }
         else
           render json: documentos_origen.errors.full_messages.first, status: 415
         end

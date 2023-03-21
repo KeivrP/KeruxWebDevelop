@@ -1,5 +1,5 @@
 import { Grid, Skeleton } from "@mui/material"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
 import Header from "../../../shared/layout/header"
@@ -8,7 +8,7 @@ import { DocumentOrigin } from "../components/DocumentOrigin"
 import { HeaderSeat } from "../components/HeaderSeat"
 import { MonetaryInfo } from "../components/MonetaryInfo"
 import { Moviments } from "../components/Moviments"
-import { fetchSeatDetailsAction } from "../seats-actions"
+import { fetchSeatDetailsAction, updateSeatAction } from "../seats-actions"
 import { useAppSeat } from "../seats-hooks"
 import { ISeatParamsUpdate, IUpdateSeatInput, SeatReversoEnum } from "../seats.-types"
 
@@ -78,8 +78,8 @@ export const SeatDetailsView = () => {
         })
 
       }
-      console.log('updateInput', updateInput);
-      // distpatch(updateSeatAction(updateInput));
+      //console.log('updateInput', updateInput);
+       distpatch(updateSeatAction(updateInput));
     }
   } , [getValues, seatDetails])
 
@@ -108,9 +108,15 @@ export const SeatDetailsView = () => {
     }
   }, [seatDetails, reset])
 
+  const [nombre, setnombres] = useState(`Codificar asiento contable:# ${id}`) 
+
+  
+
   return (
     <>
-      <Header headerTitle="Codificar asiento contable: # "/*  buttonAction={goBack} */ />
+      <div>
+      <Header headerTitle={nombre} />
+    </div>
       <div className="my-div">
         <Grid container spacing={2}>
           <Grid item xs={12} lg={8} xl={9}>
