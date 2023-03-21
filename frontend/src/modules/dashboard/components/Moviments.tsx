@@ -63,48 +63,6 @@ export const Moviments = ({
     distpatch(fetchSeatValidationAction(seatId as string))
   }
 
-  const updateSeat = useCallback(() => {
-    if (seatDetails != null) {
-      const updateInput: ISeatParamsUpdate = {
-        idasiento: seatDetails.cabasiento.idasiento,
-        nunmov: seatDetails.cabdocumento.codsitio,
-        data_asiento: {
-          descasiento: seatDetails.cabasiento.descasiento,
-          fecasiento: seatDetails.cabasiento.fecasiento,
-        },
-        data_documento: {
-          tipodoc: seatDetails.cabdocumento.tipodoc,
-          numbenef: seatDetails.cabdocumento.numbenef,
-          codmoneda: seatDetails.cabdocumento.codmoneda,
-          codsitio: seatDetails.cabdocumento.codsitio,
-          codmonedamtodoc: seatDetails.cabdocumento.codmonedamtodoc,
-          dsp_nombrebenef: seatDetails.cabdocumento.dsp_nombrebenef,
-          montoorig: seatDetails.cabdocumento.montoorig,
-          mtodoc: seatDetails.cabdocumento.mtodoc,
-          refdoc: seatDetails.cabdocumento.refdoc,
-          iddocref: seatDetails.cabdocumento.iddocref,
-          indreverso: seatDetails.cabdocumento.indreverso
-        },
-        data_movimiento: seatDetails.detasiento.map((movimiento) => {
-          return {
-            anocont: movimiento.anocont,
-            percont: movimiento.percont,
-            numpublicacion: movimiento.numpublicacion,
-            codcuenta: movimiento.codcuenta,
-            tipoauxiliar: movimiento.tipoauxiliar,
-            codauxiliar: movimiento.codauxiliar,
-            montodb: movimiento.montodb,
-            montocr: movimiento.montocr,
-            codmoneda: movimiento.codmoneda,
-            descmov: movimiento.descmov,
-          }
-        })
-
-      }
-      console.log('updateInput', updateInput);
-      // distpatch(updateSeatAction(updateInput));
-    }
-  } , [distpatch, seatDetails])
 
   if (loadingSeatDetails) {
     return (
