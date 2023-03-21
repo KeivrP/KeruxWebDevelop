@@ -1,4 +1,4 @@
-import {IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../../../shared/layout/header";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
@@ -9,7 +9,7 @@ import { ISeat } from "../../dashboard/seats.-types";
 import { ExpandIcon } from "../../../shared/icons/ExpandIcon";
 import { RecIcon } from "../../../shared/icons/RecIcon";
 import { RchIcon } from "../../../shared/icons/RchIcon";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 interface Filter {
@@ -49,9 +49,8 @@ export const ContView = ({
 
 
   useEffect(() => {
-    dispatch(getContAction())
-  }, [dispatch])
-
+    dispatch(getContAction({ page: page.toString(), per: rowsPerPage.toString() }))
+  }, [page, rowsPerPage])
   useEffect(() => {
     if (seat != null) {
       setAseinto(seat)
@@ -69,7 +68,7 @@ export const ContView = ({
       <Header headerTitle="Asientos por codificar" /* buttonAction={goBack} */ />
       <div className="my-div">
         <DataTable
-           columns={[
+          columns={[
             {
               key: 'id',
               title: 'Id Doc',
@@ -82,10 +81,10 @@ export const ContView = ({
               render: (values: ISeat) => {
                 return (
                   <button style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => handleRowClick(values.idasiento)}>
-                  <span style={{ fontWeight: 'bold' }}>
-                    {values.iddoc}
-                  </span>
-                </button>
+                    <span style={{ fontWeight: 'bold' }}>
+                      {values.iddoc}
+                    </span>
+                  </button>
                 )
               }
 
@@ -103,7 +102,7 @@ export const ContView = ({
                   </span>
                 )
               },
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -126,7 +125,7 @@ export const ContView = ({
             {
               key: 'anocont',
               title: 'Año',
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -139,7 +138,7 @@ export const ContView = ({
             {
               key: 'percont',
               title: 'Periodo',
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -152,7 +151,7 @@ export const ContView = ({
             {
               key: 'fecasiento',
               title: 'Fecha',
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -165,7 +164,7 @@ export const ContView = ({
             {
               key: 'numpublicacion',
               title: 'Publicacion',
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -178,7 +177,7 @@ export const ContView = ({
             {
               key: 'dsp_MtoDoc',
               title: 'Monto',
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -196,7 +195,7 @@ export const ContView = ({
                   <span style={{ display: 'inline-flex', alignItems: 'center' }}>
                     {values.stsasiento === "REC" ? (
                       <>
-                       <RecIcon sx={{fontSize: "large"}} />
+                        <RecIcon sx={{ fontSize: "large" }} />
                       </>
                     ) : (
                       <>
@@ -206,7 +205,7 @@ export const ContView = ({
                   </span>
                 )
               },
-              TableBodyCellProps:{
+              TableBodyCellProps: {
                 align: "center"
               },
               TableHeadCellProps: {
@@ -216,7 +215,7 @@ export const ContView = ({
                 }
               }
             },
-           ]}
+          ]}
           //onRowClick={handleRowClick}
           data={asiento}
           PaginationProps={{
@@ -305,7 +304,7 @@ export const ContView = ({
                 value: 'stsasiento',
               },
             ],
-      }}
+          }}
 
         />
       </div>
