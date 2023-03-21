@@ -50,7 +50,7 @@ export const fetchSeatMonedaAction = createAsyncThunk(
     });
     const url = '/cont/asientos_contables/moneda';
     //const res = await Api.get<{moneda: any}>(`${url}?${queryParams.toString()}`);
-    const res = await Api.get<IMonedaSelect>(`${url}?${queryParams.toString()}`);
+    const res = await Api.get<IMonedaSelect[]>(`${url}?${queryParams.toString()}`);
     return res.data;
   }
 );

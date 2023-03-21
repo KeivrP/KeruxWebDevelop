@@ -17,7 +17,7 @@ export interface SeatsState {
   loadingSeatUpdate: boolean;
   seatUpdateError: null | Error
 
-  seatLstMoneda: null | IMonedaSelect
+  seatLstMoneda: IMonedaSelect[]
   loadingSeatLstMond: boolean
 
 }
@@ -35,7 +35,7 @@ const initialState: SeatsState = {
   loadingSeatUpdate: false,
   seatUpdateError: null,
 
-  seatLstMoneda: null,
+  seatLstMoneda: [],
   loadingSeatLstMond: false
 }
 
@@ -91,7 +91,7 @@ export const seatSlice = createSlice({
 ////////////////////////////////////////////lista moneada
     builder.addCase(fetchSeatMonedaAction.pending, (state) => {
       state.loadingSeatLstMond = true;
-      state.seatLstMoneda = null;
+      state.seatLstMoneda = [];
     });
     builder.addCase(fetchSeatMonedaAction.fulfilled, (state, action) => {
       state.loadingSeatLstMond = false;

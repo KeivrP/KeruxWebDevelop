@@ -37,20 +37,11 @@ export const MonetaryInfo = ({
   const distpatch = useAppDispatch();
   const [showCoin, setShowCoin] = useState<MonetaryInfoEnum>(MonetaryInfoEnum.document);
   const { seatDetails, loadingSeatDetails, seatLstMoneda } = useAppSeat()
-  const [lstMoneda, setLstMoneda] = useState<IMonedaSelect[]>([]);
-  
-  console.log(lstMoneda)
-
-  useEffect(() => {
-    if (seatLstMoneda != null) {
-      setLstMoneda(seatLstMoneda);
-    }
-  }, [seatLstMoneda])
 
   const getLstMoneda = useCallback(() => {
     if (seatDetails != null) {
       const codsitio = seatDetails.cabdocumento.codsitio
-      const fecdoc = seatDetails.cabdocumento.fecdoc
+      const fecdoc = seatDetails.cabdocumento.fecdoc as string;
       distpatch(fetchSeatMonedaAction({ codsitio, fecdoc }))
     }
 
@@ -59,8 +50,6 @@ export const MonetaryInfo = ({
   useEffect(() => {
     getLstMoneda()
   }, [getLstMoneda]);
-
-
 
   const mtoDocCtrl = useController({
     name: 'cabdocumento.mtodoc',
@@ -176,7 +165,7 @@ export const MonetaryInfo = ({
                     fontWeight: 600
                   }
                 }}>
-                {lstMoneda.map((moneda) => (
+                {seatLstMoneda.map((moneda) => (
                   <MenuItem key={moneda.codmoneda} value={moneda.codmoneda}>
                     {moneda.nommoneda}
                   </MenuItem>

@@ -50,8 +50,6 @@ export const DocumentOrigin = ({
     seatDetails ? canEditSeat(seatDetails) : false
   , [seatDetails])
 
-  console.log('nombreNefCtrl.field.value', nombreNefCtrl.field.value)
-
   if (loadingSeatDetails) return (
     <Skeleton variant="rounded" height={150} />
   )
@@ -89,6 +87,7 @@ export const DocumentOrigin = ({
               }}>
               <MenuItem value="AN002">AN002</MenuItem>
               <MenuItem value="ACI01">ACI01</MenuItem>
+              <MenuItem value="AIN01">AIN01</MenuItem>
             </TextField>
           </Grid>
           <Grid item lg={3}>
@@ -175,6 +174,7 @@ export const DocumentOrigin = ({
               }}
             >
              <MenuItem value="SENIAT">SENIAT</MenuItem> 
+             <MenuItem value="KENTRON SISTEMAS DE INFORMACION CR C.A.">KENTRON SISTEMAS DE INFORMACION CR C.A.</MenuItem> 
           </TextField>
           </Grid>
           <Grid item lg={2}>

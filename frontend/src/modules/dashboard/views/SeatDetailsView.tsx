@@ -10,7 +10,7 @@ import { MonetaryInfo } from "../components/MonetaryInfo"
 import { Moviments } from "../components/Moviments"
 import { fetchSeatDetailsAction } from "../seats-actions"
 import { useAppSeat } from "../seats-hooks"
-import { IUpdateSeatInput, SeatReversoEnum } from "../seats.-types"
+import { ISeatParamsUpdate, IUpdateSeatInput, SeatReversoEnum } from "../seats.-types"
 
 export const SeatDetailsView = () => {
   const { control, reset, handleSubmit } = useForm<IUpdateSeatInput>({
@@ -39,6 +39,50 @@ export const SeatDetailsView = () => {
     distpatch(fetchSeatDetailsAction(id as string))
   }, [id, distpatch])
 
+  const updateSeat = useCallback((newValues: IUpdateSeatInput) => {
+    // TODO: REMPLAZAR POR NEW VALUES
+    if (seatDetails != null) {
+      const updateInput: ISeatParamsUpdate = {
+        idasiento: seatDetails.cabasiento.idasiento,
+        nunmov: seatDetails.cabdocumento.codsitio,
+        data_asiento: {
+          descasiento: seatDetails.cabasiento.descasiento,
+          fecasiento: newValues.cabasiento.fecasiento,
+        },
+        data_documento: {
+          tipodoc: seatDetails.cabdocumento.tipodoc,
+          numbenef: seatDetails.cabdocumento.numbenef,
+          codmoneda: seatDetails.cabdocumento.codmoneda,
+          codsitio: seatDetails.cabdocumento.codsitio,
+          codmonedamtodoc: seatDetails.cabdocumento.codmonedamtodoc,
+          dsp_nombrebenef: seatDetails.cabdocumento.dsp_nombrebenef,
+          montoorig: seatDetails.cabdocumento.montoorig,
+          mtodoc: seatDetails.cabdocumento.mtodoc,
+          refdoc: seatDetails.cabdocumento.refdoc,
+          iddocref: seatDetails.cabdocumento.iddocref,
+          indreverso: seatDetails.cabdocumento.indreverso
+        },
+        data_movimiento: seatDetails.detasiento.map((movimiento) => {
+          return {
+            anocont: movimiento.anocont,
+            percont: movimiento.percont,
+            numpublicacion: movimiento.numpublicacion,
+            codcuenta: movimiento.codcuenta,
+            tipoauxiliar: movimiento.tipoauxiliar,
+            codauxiliar: movimiento.codauxiliar,
+            montodb: movimiento.montodb,
+            montocr: movimiento.montocr,
+            codmoneda: movimiento.codmoneda,
+            descmov: movimiento.descmov,
+          }
+        })
+
+      }
+      console.log('updateInput', updateInput);
+      // distpatch(updateSeatAction(updateInput));
+    }
+  } , [distpatch, seatDetails])
+
   useEffect(() => {
     getSeatDetails()
   }, [getSeatDetails]);
@@ -64,12 +108,10 @@ export const SeatDetailsView = () => {
     }
   }, [seatDetails, reset])
 
-  console.log("seatDetails", seatDetails)
-
   return (
     <>
       <Header headerTitle="Codificar asiento contable: # "/*  buttonAction={goBack} */ />
-      <form onSubmit={handleSubmit((newValues) => console.log('newValues', newValues))}>
+      <form onSubmit={handleSubmit(updateSeat)}>
         <div className="my-div">
           <Grid container spacing={2}>
             <Grid item xs={12} lg={8} xl={9}>

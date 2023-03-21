@@ -63,14 +63,9 @@ export const Moviments = ({
     distpatch(fetchSeatValidationAction(seatId as string))
   }
 
-  if (loadingSeatDetails) {
-    return (
-      <Skeleton variant="rounded" height={345} />
-    )
-  }
-  const handleSubmit = () => {
+  const updateSeat = useCallback(() => {
     if (seatDetails != null) {
-      distpatch(updateSeatAction({
+      const updateInput: ISeatParamsUpdate = {
         idasiento: seatDetails.cabasiento.idasiento,
         nunmov: seatDetails.cabdocumento.codsitio,
         data_asiento: {
@@ -105,9 +100,17 @@ export const Moviments = ({
           }
         })
 
+      }
+      console.log('updateInput', updateInput);
+      // distpatch(updateSeatAction(updateInput));
+    }
+  } , [distpatch, seatDetails])
 
-      }))
-    }}
+  if (loadingSeatDetails) {
+    return (
+      <Skeleton variant="rounded" height={345} />
+    )
+  }
 
     return (
       <>
@@ -153,9 +156,7 @@ export const Moviments = ({
                       type="submit"
                       fullWidth
                       variant="contained"
-                      color="inherit"
-                      onClick={handleSubmit}
-                    >
+                      color="inherit">
 
                       GUARDAR
                     </Button>

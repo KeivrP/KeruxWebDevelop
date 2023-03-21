@@ -66,7 +66,7 @@ export interface ISeatDocument {
   refdoc:          string;
   mtodoc:          string;
   stsdoc:          string;
-  fecdoc:          Date;
+  fecdoc:          Date | string;
   tipodoc:         string;
   ano:             number;
   usrsts:          string;
