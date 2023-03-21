@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchSeatDetailsAction, fetchSeatValidationAction, updateSeatAction } from "./seats-actions";
-import { ISeat, ISeatDetails, ISeatParamsUpdate } from "./seats.-types";
+import { fetchSeatDetailsAction, fetchSeatMonedaAction, fetchSeatValidationAction, updateSeatAction } from "./seats-actions";
+import { IMonedaSelect, ISeat, ISeatDetails, ISeatParamsUpdate } from "./seats.-types";
 
 export const SEAT_SLICE_NAME = 'seat';
 
@@ -8,6 +8,7 @@ export interface SeatsState {
   seatDetails: null | ISeatDetails;
   loadingSeatDetails: boolean;
   seatDetailsError: null | Error;
+
   seatValidate: null | string;
   loadingSeatValidate: boolean;
   seatValidateError: null | Error;
@@ -16,18 +17,26 @@ export interface SeatsState {
   loadingSeatUpdate: boolean;
   seatUpdateError: null | Error
 
+  seatLstMoneda: null | IMonedaSelect
+  loadingSeatLstMond: boolean
+
 }
 
 const initialState: SeatsState = {
   seatDetails: null,
   loadingSeatDetails: false,
   seatDetailsError: null,
+
   seatValidate: null,
   loadingSeatValidate: false,
   seatValidateError: null,
+
   seatUpdate: null,
   loadingSeatUpdate: false,
-  seatUpdateError: null
+  seatUpdateError: null,
+
+  seatLstMoneda: null,
+  loadingSeatLstMond: false
 }
 
 export const seatSlice = createSlice({
@@ -37,6 +46,7 @@ export const seatSlice = createSlice({
 
   },
   extraReducers: (builder) => {
+    //////////////////////////////////show
     builder.addCase(fetchSeatDetailsAction.pending, (state) => {
       state.loadingSeatDetails = true;
       state.seatDetailsError = null;
@@ -50,7 +60,7 @@ export const seatSlice = createSlice({
       state.seatDetails = null;
       state.seatDetailsError = new Error(action.error.message);
     });
-
+////////////////////////////////BtnValidar
     builder.addCase(fetchSeatValidationAction.pending, (state) => {
       state.loadingSeatValidate = true;
       state.seatValidateError = null;
@@ -64,7 +74,7 @@ export const seatSlice = createSlice({
       state.seatValidate = null;
       state.seatValidateError = new Error(action.error.message);
     });
-
+///////////////////////////////////////BotonActualizar
     builder.addCase(updateSeatAction.pending, (state) => {
       state.loadingSeatUpdate = true;
       state.seatUpdate = null;
@@ -78,5 +88,15 @@ export const seatSlice = createSlice({
       state.seatUpdate = null;
       state.seatUpdateError = new Error(action.error.message);
     });
+////////////////////////////////////////////lista moneada
+    builder.addCase(fetchSeatMonedaAction.pending, (state) => {
+      state.loadingSeatLstMond = true;
+      state.seatLstMoneda = null;
+    });
+    builder.addCase(fetchSeatMonedaAction.fulfilled, (state, action) => {
+      state.loadingSeatLstMond = false;
+      state.seatLstMoneda = action.payload;
+    });
+
   }
 })

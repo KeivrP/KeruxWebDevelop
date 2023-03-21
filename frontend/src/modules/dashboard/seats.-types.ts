@@ -12,6 +12,11 @@ export interface ISeat {
   idasiento?: any;
 }
 
+export interface IMonedaSelect {
+  codmoneda: string,
+  nommoneda: string
+}
+
 export interface ISeatDetails {
   cabasiento:   ISeatHeader;
   cabdocumento: ISeatDocument;
@@ -148,7 +153,6 @@ export interface IUpdateSeatMovimientoInput {
   montocr: string, 
   codmoneda: string;
   descmov: string;
-
 }
 
 export interface IUpdateSeatDocumentInput {

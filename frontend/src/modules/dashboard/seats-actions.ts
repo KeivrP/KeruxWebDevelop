@@ -1,6 +1,12 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, AsyncThunkPayloadCreator  } from "@reduxjs/toolkit";
 import { Api } from "../../shared/api/Api";
-import { ISeatDetails, ISeatParamsUpdate } from "./seats.-types";
+import { ISeatDetails, ISeatParamsUpdate, IMonedaSelect } from "./seats.-types";
+
+interface ArgumentType {
+  fecdoc: string;
+  codsitio: string;
+}
+
 
 export const fetchSeatDetailsAction = createAsyncThunk(
   'seat/fetchSeatDetails',
@@ -13,6 +19,7 @@ export const fetchSeatDetailsAction = createAsyncThunk(
     return res.data;
   }
 );
+
 export const updateSeatAction = createAsyncThunk(
   'seat/updateSeatAction',
   async (body: ISeatParamsUpdate) => {
@@ -30,7 +37,20 @@ export const fetchSeatValidationAction = createAsyncThunk(
     });
     const url = '/cont/asientos_contables/boton_validar';
     const res = await Api.get<{ message: string }>(`${url}?${queryParams.toString()}`);
-    console.log(res.data, "data")
+    return res.data;
+  }
+);
+
+export const fetchSeatMonedaAction = createAsyncThunk(
+  'seat/fetchSeatMoneda',
+  async (args: ArgumentType, thunkAPI) => {
+    const { fecdoc, codsitio } = args;
+    const queryParams = new URLSearchParams({
+      fecdoc, codsitio
+    });
+    const url = '/cont/asientos_contables/moneda';
+    //const res = await Api.get<{moneda: any}>(`${url}?${queryParams.toString()}`);
+    const res = await Api.get<IMonedaSelect>(`${url}?${queryParams.toString()}`);
     return res.data;
   }
 );

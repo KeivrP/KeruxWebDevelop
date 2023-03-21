@@ -1,25 +1,27 @@
-import { 
+import {
   Box,
-  Card, 
-  CardContent, 
-  FormControl, 
-  FormControlLabel, 
-  FormLabel, 
-  Grid, 
-  MenuItem, 
+  Card,
+  CardContent,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  MenuItem,
   Radio,
   RadioGroup,
   Skeleton,
   TextField,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Control, useController } from "react-hook-form";
 import { TitleBar } from "../../../shared/components/bars/TitleBar";
 import { TextFieldEditable } from "../../../shared/components/inputs/TextFieldEditable";
 import { MonetaryIcon } from "../../../shared/icons/MonetaryIcon";
+import { useAppDispatch } from "../../../store/hooks";
+import { fetchSeatMonedaAction } from "../seats-actions";
 import { useAppSeat } from "../seats-hooks";
 import { canEditSeat } from "../seats-utils";
-import { IUpdateSeatInput } from "../seats.-types";
+import { IUpdateSeatInput, IMonedaSelect } from "../seats.-types";
 
 enum MonetaryInfoEnum {
   document = 'document',
@@ -32,28 +34,53 @@ export interface MonetaryInfoProps {
 export const MonetaryInfo = ({
   control
 }: MonetaryInfoProps) => {
+  const distpatch = useAppDispatch();
   const [showCoin, setShowCoin] = useState<MonetaryInfoEnum>(MonetaryInfoEnum.document);
-  const { seatDetails, loadingSeatDetails } = useAppSeat()
+  const { seatDetails, loadingSeatDetails, seatLstMoneda } = useAppSeat()
+  const [lstMoneda, setLstMoneda] = useState<IMonedaSelect[]>([]);
+  
+  console.log(lstMoneda)
 
-  const mtoDocCtrl = useController({ 
-    name: 'cabdocumento.mtodoc', 
-    control
-   });
-  const codMonedaToDocCtrl = useController({ 
-    name: 'cabdocumento.codmonedamtodoc', 
-    control
-   });
+  useEffect(() => {
+    if (seatLstMoneda != null) {
+      setLstMoneda(seatLstMoneda);
+    }
+  }, [seatLstMoneda])
 
-   const canEdit = useMemo(() => 
+  const getLstMoneda = useCallback(() => {
+    if (seatDetails != null) {
+      const codsitio = seatDetails.cabdocumento.codsitio
+      const fecdoc = seatDetails.cabdocumento.fecdoc
+      distpatch(fetchSeatMonedaAction({ codsitio, fecdoc }))
+    }
+
+  }, [distpatch, seatDetails])
+
+  useEffect(() => {
+    getLstMoneda()
+  }, [getLstMoneda]);
+
+
+
+  const mtoDocCtrl = useController({
+    name: 'cabdocumento.mtodoc',
+    control
+  });
+  const codMonedaToDocCtrl = useController({
+    name: 'cabdocumento.codmonedamtodoc',
+    control
+  });
+
+  const canEdit = useMemo(() =>
     seatDetails ? canEditSeat(seatDetails) : false
-  , [seatDetails])
+    , [seatDetails])
 
   const origenInputs = useMemo(() => {
-    if(showCoin === MonetaryInfoEnum.document) return null;
+    if (showCoin === MonetaryInfoEnum.document) return null;
     return (
       <>
         <Grid item xs={3}>
-          <TextField 
+          <TextField
             label="Tasa"
             fullWidth
             variant="standard"
@@ -67,7 +94,7 @@ export const MonetaryInfo = ({
           />
         </Grid>
         <Grid item xs={3}>
-          <TextField 
+          <TextField
             label="Moneda Original"
             fullWidth
             variant="standard"
@@ -81,7 +108,7 @@ export const MonetaryInfo = ({
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField 
+          <TextField
             label="Monto Original"
             fullWidth
             variant="standard"
@@ -114,8 +141,8 @@ export const MonetaryInfo = ({
               <FormControl>
                 <FormLabel>Moneda</FormLabel>
                 <RadioGroup row name="coin" value={showCoin} onChange={(e) => setShowCoin(e.currentTarget.value as MonetaryInfoEnum)}>
-                  <FormControlLabel value="document" control={<Radio />}  label="Documento" />
-                  <FormControlLabel value="origin" control={<Radio />}  label="Origen" />
+                  <FormControlLabel value="document" control={<Radio />} label="Documento" />
+                  <FormControlLabel value="origin" control={<Radio />} label="Origen" />
                 </RadioGroup>
               </FormControl>
             </Grid>
@@ -133,7 +160,7 @@ export const MonetaryInfo = ({
                   }
                 }}
               />
-              
+
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -149,7 +176,11 @@ export const MonetaryInfo = ({
                     fontWeight: 600
                   }
                 }}>
-                  <MenuItem value="VES">VES</MenuItem>
+                {lstMoneda.map((moneda) => (
+                  <MenuItem key={moneda.codmoneda} value={moneda.codmoneda}>
+                    {moneda.nommoneda}
+                  </MenuItem>
+                ))}
               </TextField>
             </Grid>
             {origenInputs}
