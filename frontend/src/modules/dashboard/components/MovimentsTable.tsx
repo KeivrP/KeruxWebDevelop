@@ -1,13 +1,29 @@
 import { 
   Box, 
+  Fab, 
   IconButton, 
   TableContainer,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { TableBase } from "../../../shared/components/table/TableBase";
 import { ExpandIcon } from "../../../shared/icons/ExpandIcon";
+import { useAppSeat } from "../seats-hooks";
+import { ISeatMoviment } from "../seats.-types";
+import AddIcon from '@mui/icons-material/Add';
+
 
 
 export const MovimentsTable = () => {
+  const { loadingSeatValidate, seatDetails } = useAppSeat();
+  const [detalleMov, setDetalleMov] = useState<ISeatMoviment[]>([]);
+
+  useEffect(()=>{
+    if(seatDetails != null){
+      setDetalleMov(seatDetails.detasiento)
+    }
+  },[seatDetails])
+
+
   return (
     <Box display="flex" flexDirection="column">
       <TableContainer
@@ -16,8 +32,8 @@ export const MovimentsTable = () => {
         <TableBase 
           columns={[
             {
-              key: 'n',
-              title: 'N',
+              key: 'nummov',
+              title: 'N°',
               TableHeadCellProps: {
                 align: "center",
                 style: {
@@ -25,18 +41,19 @@ export const MovimentsTable = () => {
                 }
               },
               TableBodyCellProps: {
+                align: "center",
                 style: {
                   fontWeight: 600
                 }
               }
             },
             {
-              key: 'description',
+              key: 'codcuenta',
               title: 'Descripcion',
               render: (values: any) => {
                 return (
                   <span style={{ display:'inline-flex', alignItems: 'center' }}>
-                    {values.description} 
+                    {values.codcuenta} 
                     <IconButton size="small" style={{ marginLeft: 8 }}>
                       <ExpandIcon color="primary" style={{ fontSize: '1rem' }} />
                     </IconButton>
@@ -51,7 +68,7 @@ export const MovimentsTable = () => {
               }
             },
             {
-              key: 'auxiliar',
+              key: 'codauxiliar',
               title: 'Auxiliar',
               TableHeadCellProps: {
                 align: "center",
@@ -61,8 +78,11 @@ export const MovimentsTable = () => {
               }
             },
             {
-              key: 'debit',
+              key: 'montodb',
               title: 'Debito',
+              TableBodyCellProps: {
+                align: "center",
+              },
               TableHeadCellProps: {
                 align: "center",
                 style: {
@@ -71,8 +91,11 @@ export const MovimentsTable = () => {
               }
             },
             {
-              key: 'credit',
+              key: 'montocr',
               title: 'Credito',
+              TableBodyCellProps: {
+                align: "center",
+              },
               TableHeadCellProps: {
                 align: "center",
                 style: {
@@ -81,12 +104,7 @@ export const MovimentsTable = () => {
               }
             },
           ]}
-          data={[
-            {
-              n: 'aja',
-              description: 'Anticipo contractual CTTO...'
-            }
-          ]}
+          data={detalleMov}
           footerColumns={[
             {
               TableCellProps: {
@@ -116,6 +134,7 @@ export const MovimentsTable = () => {
               },
               value: '48.000,00 Bs',
             },
+
             {
               TableCellProps: {
                 style: {
@@ -127,6 +146,12 @@ export const MovimentsTable = () => {
             }
           ]}
         />
+      <div style={{ position: 'absolute', /* bottom:10, left: 20 */ }}>
+                    <Fab size="medium" sx={{backgroundColor:"#C72747"}} aria-label="add">
+                        <AddIcon sx={{color:"#FFF"}}/>
+                    </Fab>
+                
+            </div>
       </TableContainer>
       <Box bgcolor="#EEE">
         

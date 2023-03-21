@@ -5,6 +5,7 @@ export interface ISeat {
   anocont: number;
   percont: number;
   fecasiento: string;
+  dsp_MtoDoc: string;
   numpublicacion: number;
   stsasiento: string;
   raw_rnum_: number;
@@ -112,15 +113,23 @@ export interface ISeatMoviment {
   percont:          number;
   codcuenta:        string;
   numpublicacion:   number;
-  tipoauxiliar:     null;
-  codauxiliar:      null;
+  tipoauxiliar:     string;
+  codauxiliar:      string;
   montodb:          string;
   montocr:          string;
   codmoneda:        string;
-  descmov:          null;
+  descmov:          string;
   dsp_DesCtaPub:    string;
   dsp_DescAuxiliar: null;
   dsp_CuentaPadre:  string;
+}
+
+export interface ISeatParamsUpdate {
+  idasiento: number;
+  nunmov: string;
+  data_asiento: IUpdateSeatHeaderInput;
+  data_documento: IUpdateSeatDocumentInput;
+  data_movimiento: IUpdateSeatMovimientoInput[];
 }
 
 export interface IUpdateSeatHeaderInput {
@@ -128,8 +137,25 @@ export interface IUpdateSeatHeaderInput {
   fecasiento: Date | string;
 }
 
+export interface IUpdateSeatMovimientoInput {
+  anocont: number; 
+  percont: number; 
+  numpublicacion: number;
+  codcuenta: string;
+  tipoauxiliar: string;
+  codauxiliar:string; 
+  montodb: string, 
+  montocr: string, 
+  codmoneda: string;
+  descmov: string;
+
+}
+
 export interface IUpdateSeatDocumentInput {
   tipodoc: string;
+  numbenef: number,
+  codsitio: string,
+  codmoneda : string;
   dsp_nombrebenef: string;
   iddocref: string | null;
   indreverso: SeatReversoEnum;

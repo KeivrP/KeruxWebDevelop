@@ -81,7 +81,7 @@ export const SeatDetailsView = () => {
               <MonetaryInfo control={control} />
             </Grid>
             <Grid item xs={12}>
-              <Moviments control={control}/>
+              <Moviments control={control}/ >
             </Grid>
           </Grid>
         </div>
