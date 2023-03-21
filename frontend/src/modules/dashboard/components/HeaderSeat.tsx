@@ -39,7 +39,7 @@ export const HeaderSeat = ({
         <Grid container spacing={3}>
           <Grid item lg={6}>
             <TextFieldEditable
-              label="Descripcion"
+              label="Descripción"
               fullWidth
               size="small"
               variant="standard"
@@ -74,7 +74,7 @@ export const HeaderSeat = ({
           </Grid>
           <Grid item lg={1}>
             <TextField
-              label="Numero"
+              label="Número"
               fullWidth
               size="small"
               variant="standard"
@@ -98,7 +98,7 @@ export const HeaderSeat = ({
           </Grid>
           <Grid item lg={1}>
             <TextField
-              label="Periodo"
+              label="Período"
               fullWidth
               size="small"
               variant="standard"

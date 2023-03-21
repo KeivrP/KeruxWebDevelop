@@ -5,12 +5,46 @@ export interface ISeat {
   anocont: number;
   percont: number;
   fecasiento: string;
+  dsp_MtoDoc: string;
   numpublicacion: number;
   stsasiento: string;
   raw_rnum_: number;
   idasiento?: any;
 }
 
+export interface IMonedaSelect {
+  codmoneda: string,
+  nommoneda: string
+}
+export interface IDocumenttype {
+  desctipodoc: string,
+  tipodocref: string
+  indrefdoc: string
+}
+
+export interface IBeneficiary{
+  nombre: string,
+  numbenf: string,
+  rifbenef: string,
+
+}
+export interface ISeatDocRef{
+  iddoc: string,
+  descdoc: string,
+  numbenef: string,
+
+}
+export interface ISeatCueAux{
+  codauxiliar: string,
+  descauxiliar: string,
+
+}
+
+export interface ISeatCuePub {
+  codcuenta:   string;
+  descuenta: string;
+  tipoauxiliar:  string;
+}
 export interface ISeatDetails {
   cabasiento:   ISeatHeader;
   cabdocumento: ISeatDocument;
@@ -57,10 +91,11 @@ export interface ISeatDocument {
   descdoc:         string;
   origen:          string;
   numbenef:        number;
+  dsp_tiponombre: string;
   refdoc:          string;
   mtodoc:          string;
   stsdoc:          string;
-  fecdoc:          Date;
+  fecdoc:          Date | string;
   tipodoc:         string;
   ano:             number;
   usrsts:          string;
@@ -112,15 +147,28 @@ export interface ISeatMoviment {
   percont:          number;
   codcuenta:        string;
   numpublicacion:   number;
-  tipoauxiliar:     null;
-  codauxiliar:      null;
+  tipoauxiliar:     string;
+  codauxiliar:      string;
   montodb:          string;
   montocr:          string;
   codmoneda:        string;
-  descmov:          null;
+  descmov:          string;
   dsp_DesCtaPub:    string;
   dsp_DescAuxiliar: null;
   dsp_CuentaPadre:  string;
+}
+
+export interface ISeatParamsUpdate {
+  idasiento: number;
+  //nunmov: string;
+  data_asiento: IUpdateSeatHeaderInput;
+  data_documento: IUpdateSeatDocumentInput;
+  data_movimiento: IUpdateSeatMovimientoInput[];
+}
+export interface ISeatParamsUpdateMov {
+  idasiento: number;
+  nunmov: string;
+  data_movimiento: IUpdateSeatMovimientoInput[];
 }
 
 export interface IUpdateSeatHeaderInput {
@@ -128,8 +176,24 @@ export interface IUpdateSeatHeaderInput {
   fecasiento: Date | string;
 }
 
+export interface IUpdateSeatMovimientoInput {
+  anocont: number; 
+  percont: number; 
+  numpublicacion: number;
+  codcuenta: string;
+  tipoauxiliar: string;
+  codauxiliar:string; 
+  montodb: string, 
+  montocr: string, 
+  codmoneda: string;
+  descmov: string;
+}
+
 export interface IUpdateSeatDocumentInput {
   tipodoc: string;
+  numbenef: number,
+  codsitio: string,
+  codmoneda : string;
   dsp_nombrebenef: string;
   iddocref: string | null;
   indreverso: SeatReversoEnum;

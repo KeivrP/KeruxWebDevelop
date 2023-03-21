@@ -7,8 +7,8 @@ module Doc
       adapter: "oracle_enhanced",
       encoding: "utf8",
       database: "//keruxdb:1521/PREPROD",
-      username: 'ROBERTO',
-      password: 'ROBERTO$P'
+      username: "ROBERTO",
+      password: "ROBERTO$P",
     )
 
     include MetodoGlobal
@@ -25,8 +25,8 @@ module Doc
     belongs_to :TipoDocumento, foreign_key: "tipodoc"
     belongs_to :Beneficiario, foreign_key: "numbenef"
     belongs_to :VBenefActivo, foreign_key: "numbenef"
-    belongs_to :MonedaSitio, class_name: "Kentron::MonedaSitio", foreign_key: [ :codsitio, :codmoneda]
-    belongs_to :MonedaSitioMtoDoc, class_name: "Kentron::MonedaSitio", foreign_key: [ :codsitio, :codmonedamtodoc]
+    belongs_to :MonedaSitio, class_name: "Kentron::MonedaSitio", foreign_key: [:codsitio, :codmoneda]
+    belongs_to :MonedaSitioMtoDoc, class_name: "Kentron::MonedaSitio", foreign_key: [:codsitio, :codmonedamtodoc]
     has_many :Sitio, through: :MonedaSitio
     has_many :Moneda, through: :MonedaSitio
 
@@ -40,9 +40,15 @@ module Doc
 
     # Métodos del modelo
     # Método para mostrar el tipo de documento
+
     def dsp_desctipodoc
       #self.TipoDocumento.try(:desctipodoc)
-      tipodoc = Doc::TipoDocumento.select(:tipodoc, :desctipodoc, :tipodocref, :indrefdoc).where(tipodoc: self.tipodoc).first
+      tipodoc = Doc::TipoDocumento.select(:desctipodoc).where(tipodoc: self.tipodoc).first
+    end
+
+    def dsp_tiponombre
+      self.TipoDocumento.try(:desctipodoc)
+      #tipodoc = Doc::TipoDocumento.select(:desctipodoc).where(tipodoc: self.tipodoc).first
     end
 
     #Validaciones
