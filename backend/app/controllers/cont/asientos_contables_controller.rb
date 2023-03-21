@@ -443,6 +443,7 @@ class Cont::AsientosContablesController < ApplicationController
       rifbenef
       dsp_nombrebenef
       dsp_desctipodoc
+      dsp_tiponombre
     ]
   end
 

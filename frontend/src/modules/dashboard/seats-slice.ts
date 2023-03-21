@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchSeatDetailsAction, fetchSeatMonedaAction, fetchSeatValidationAction, updateSeatAction } from "./seats-actions";
-import { IMonedaSelect, ISeat, ISeatDetails, ISeatParamsUpdate } from "./seats.-types";
+import { deleteMoviAction, fetchBeneficiaryAction, fetchCodAuxAction, fetchCuentasPubAction, fetchDocRefAction, fetchdocumenttypeAction, fetchSeatCodificar, fetchSeatDetailsAction, fetchSeatMonedaAction, fetchSeatValidationAction, updateMoviAction, updateSeatAction } from "./seats-actions";
+import { IBeneficiary, IDocumenttype, IMonedaSelect, ISeat, ISeatCueAux, ISeatCuePub, ISeatDetails, ISeatDocRef, ISeatParamsUpdate } from "./seats.-types";
 
 export const SEAT_SLICE_NAME = 'seat';
 
@@ -20,6 +20,30 @@ export interface SeatsState {
   seatLstMoneda: IMonedaSelect[]
   loadingSeatLstMond: boolean
 
+  seatTypeDocument: IDocumenttype[]
+  loadingTypeDocument: boolean
+
+  seatBeneficiary: IBeneficiary[]
+  loadingBeneficiary: boolean
+
+  seatCuenPub: ISeatCuePub[]
+  loadingCuentaPub: boolean
+
+  seatCodAux: ISeatCueAux[]
+  loadingCodAux: boolean
+
+  seatDocRef: ISeatDocRef[]
+  loadingDocRef: boolean
+
+  seatCodificar: null | string;
+  loadingCodificar: boolean;
+
+  seatUpdateMovi: null | string;
+  loadingMov: boolean;
+
+  DeleteMovi: null | string;
+  loadingDelectMovi: boolean;
+
 }
 
 const initialState: SeatsState = {
@@ -36,7 +60,29 @@ const initialState: SeatsState = {
   seatUpdateError: null,
 
   seatLstMoneda: [],
-  loadingSeatLstMond: false
+  loadingSeatLstMond: false,
+
+  seatTypeDocument: [],
+  loadingTypeDocument: false,
+
+  seatBeneficiary: [],
+  loadingBeneficiary: false,
+
+  seatCodAux:[],
+  loadingCodAux: false,
+
+  seatCuenPub:[],
+  loadingCuentaPub: false,
+
+  seatDocRef:[],
+  loadingDocRef: false,
+
+  seatCodificar: null,
+  loadingCodificar: false,
+  seatUpdateMovi: null,
+  loadingMov: false,
+  DeleteMovi: null,
+  loadingDelectMovi: false
 }
 
 export const seatSlice = createSlice({
@@ -96,6 +142,78 @@ export const seatSlice = createSlice({
     builder.addCase(fetchSeatMonedaAction.fulfilled, (state, action) => {
       state.loadingSeatLstMond = false;
       state.seatLstMoneda = action.payload;
+    });
+  ///////////////////////////////////////////////Tipo Documento
+    builder.addCase(fetchdocumenttypeAction.pending, (state) => {
+      state.loadingTypeDocument = true;
+      state.seatTypeDocument = [];
+    });
+    builder.addCase(fetchdocumenttypeAction.fulfilled, (state, action) => {
+      state.loadingTypeDocument = false;
+      state.seatTypeDocument = action.payload;
+    });
+    ///////////////////////beneficiario
+    builder.addCase(fetchBeneficiaryAction.pending, (state) => {
+      state.loadingBeneficiary = true;
+      state.seatBeneficiary = [];
+    });
+    builder.addCase(fetchBeneficiaryAction.fulfilled, (state, action) => {
+      state.loadingBeneficiary = false;
+      state.seatBeneficiary = action.payload;
+    });
+    ////////////////////////CuentasPub
+    builder.addCase(fetchCuentasPubAction.pending, (state) => {
+      state.loadingCuentaPub = true;
+      state.seatCuenPub = [];
+    });
+    builder.addCase(fetchCuentasPubAction.fulfilled, (state, action) => {
+      state.loadingCuentaPub = false;
+      state.seatCuenPub = action.payload;
+    });
+    //////////////////////codigoauxiliar
+    builder.addCase(fetchCodAuxAction.pending, (state) => {
+      state.loadingCodAux = true;
+      state.seatCodAux = [];
+    });
+    builder.addCase(fetchCodAuxAction.fulfilled, (state, action) => {
+      state.loadingCodAux = false;
+      state.seatCodAux = action.payload;
+    });
+    /////////////////////////docreferencia
+    builder.addCase(fetchDocRefAction.pending, (state) => {
+      state.loadingDocRef = true;
+      state.seatDocRef = [];
+    });
+    builder.addCase(fetchDocRefAction.fulfilled, (state, action) => {
+      state.loadingDocRef = false;
+      state.seatDocRef = action.payload;
+    });
+
+    //////////////////////////botonCodificar
+    builder.addCase(fetchSeatCodificar.pending, (state) => {
+      state.loadingCodificar = true;
+    });
+    builder.addCase(fetchSeatCodificar.fulfilled, (state, action) => {
+      state.loadingCodificar = false;
+      state.seatCodificar = action.payload.message;
+    });
+    ///////////////////////////////////////ActulizarCrearMovimiento
+    builder.addCase(updateMoviAction.pending, (state) => {
+      state.loadingMov = true;
+      state.seatUpdateMovi = null;
+    });
+    builder.addCase(updateMoviAction.fulfilled, (state, action) => {
+      state.loadingMov = false;
+      state.seatUpdateMovi = action.payload.message;
+    });
+    ///////////////////////////////////////Borrar Movimiento
+    builder.addCase(deleteMoviAction.pending, (state) => {
+      state.loadingDelectMovi = true;
+      state.DeleteMovi = null;
+    });
+    builder.addCase(deleteMoviAction.fulfilled, (state, action) => {
+      state.loadingDelectMovi = false;
+      state.DeleteMovi = action.payload.message;
     });
 
   }

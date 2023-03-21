@@ -16,7 +16,35 @@ export interface IMonedaSelect {
   codmoneda: string,
   nommoneda: string
 }
+export interface IDocumenttype {
+  desctipodoc: string,
+  tipodocref: string
+  indrefdoc: string
+}
 
+export interface IBeneficiary{
+  nombre: string,
+  numbenf: string,
+  rifbenef: string,
+
+}
+export interface ISeatDocRef{
+  iddoc: string,
+  descdoc: string,
+  numbenef: string,
+
+}
+export interface ISeatCueAux{
+  codauxiliar: string,
+  descauxiliar: string,
+
+}
+
+export interface ISeatCuePub {
+  codcuenta:   string;
+  descuenta: string;
+  tipoauxiliar:  string;
+}
 export interface ISeatDetails {
   cabasiento:   ISeatHeader;
   cabdocumento: ISeatDocument;
@@ -63,6 +91,7 @@ export interface ISeatDocument {
   descdoc:         string;
   origen:          string;
   numbenef:        number;
+  dsp_tiponombre: string;
   refdoc:          string;
   mtodoc:          string;
   stsdoc:          string;
@@ -131,9 +160,14 @@ export interface ISeatMoviment {
 
 export interface ISeatParamsUpdate {
   idasiento: number;
-  nunmov: string;
+  //nunmov: string;
   data_asiento: IUpdateSeatHeaderInput;
   data_documento: IUpdateSeatDocumentInput;
+  data_movimiento: IUpdateSeatMovimientoInput[];
+}
+export interface ISeatParamsUpdateMov {
+  idasiento: number;
+  nunmov: string;
   data_movimiento: IUpdateSeatMovimientoInput[];
 }
 

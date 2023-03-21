@@ -1,19 +1,21 @@
 import { AccountCircle as AccountCircleIcon } from "@mui/icons-material";
-import { 
+import {
   Box,
-  CardContent, 
-  Checkbox, 
-  FormControlLabel, 
+  CardContent,
+  Checkbox,
+  FormControlLabel,
   Grid,
   MenuItem,
   Skeleton,
   TextField,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Control, useController } from "react-hook-form";
 import { CardWithBar } from "../../../shared/components/card/CardWithBar";
 import { TextFieldEditable } from "../../../shared/components/inputs/TextFieldEditable";
 import { BranchIcon } from "../../../shared/icons/BranchIcon";
+import { useAppDispatch } from "../../../store/hooks";
+import { fetchBeneficiaryAction } from "../seats-actions";
 import { useAppSeat } from "../seats-hooks";
 import { canEditSeat } from "../seats-utils";
 import { IUpdateSeatInput, SeatReversoEnum } from "../seats.-types";
@@ -24,11 +26,20 @@ export interface DocumentOriginProps {
 export const DocumentOrigin = ({
   control
 }: DocumentOriginProps) => {
-  const { seatDetails, loadingSeatDetails } = useAppSeat();
-  const tipoDocCtrl = useController({ 
-    name: 'cabdocumento.tipodoc', 
+  const { seatDetails, loadingSeatDetails, seatBeneficiary } = useAppSeat();
+  const distpatch = useAppDispatch();
+
+  useEffect(() => {
+    distpatch(fetchBeneficiaryAction())
+  }, [])
+
+
+
+
+  const tipoDocCtrl = useController({
+    name: 'cabdocumento.tipodoc',
     control
-   })
+  })
   const indReversoCtrl = useController({
     name: 'cabdocumento.indreverso',
     control
@@ -46,19 +57,19 @@ export const DocumentOrigin = ({
     control
   });
 
-  const canEdit = useMemo(() => 
+  const canEdit = useMemo(() =>
     seatDetails ? canEditSeat(seatDetails) : false
-  , [seatDetails])
+    , [seatDetails])
 
   if (loadingSeatDetails) return (
     <Skeleton variant="rounded" height={150} />
   )
 
   return (
-    <CardWithBar 
+    <CardWithBar
       title="Documento de origen"
       headerStartIcon={<BranchIcon fontSize="small" />}
-      >
+    >
       <CardContent>
         <Grid container alignItems="flex-end" spacing={3}>
           <Grid item lg={1}>
@@ -69,7 +80,7 @@ export const DocumentOrigin = ({
               variant="standard"
               value={seatDetails?.cabdocumento.iddoc}
               InputProps={{
-                readOnly: true 
+                readOnly: true
               }}
             />
 
@@ -96,7 +107,7 @@ export const DocumentOrigin = ({
               fullWidth
               size="small"
               variant="standard"
-              value={seatDetails?.cabdocumento.dsp_desctipodoc}
+              value={seatDetails?.cabdocumento.dsp_tiponombre}
               InputProps={{
                 readOnly: true
               }}
@@ -115,7 +126,7 @@ export const DocumentOrigin = ({
             />
           </Grid>
           <Grid item lg={2}>
-            <TextField 
+            <TextField
               label="Origen"
               fullWidth
               size="small"
@@ -127,9 +138,9 @@ export const DocumentOrigin = ({
             />
           </Grid>
           <Grid item lg={2}>
-            <FormControlLabel 
+            <FormControlLabel
               control={
-                <Checkbox 
+                <Checkbox
                   color="error"
                   checked={indReversoCtrl.field.value === SeatReversoEnum.true}
                   onChange={(e) => {
@@ -138,17 +149,17 @@ export const DocumentOrigin = ({
                         ? SeatReversoEnum.true
                         : SeatReversoEnum.false
                     )
-                  }} 
+                  }}
                 />
-              } 
-              label="Reverso" 
+              }
+              label="Reverso"
             />
           </Grid>
           <Grid item lg={3}>
             <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
               <AccountCircleIcon color="primary" sx={{ mr: 1, my: 0.5 }} />
               <TextField
-                label="Rif/Cedula" 
+                label="Rif/Cedula"
                 fullWidth
                 variant="standard"
                 size="small"
@@ -162,7 +173,7 @@ export const DocumentOrigin = ({
           </Grid>
           <Grid item lg={5}>
             <TextField
-              label="Beneficiario" 
+              label="Beneficiario"
               fullWidth
               variant="standard"
               size="small"
@@ -173,13 +184,16 @@ export const DocumentOrigin = ({
                 readOnly: !canEdit
               }}
             >
-             <MenuItem value="SENIAT">SENIAT</MenuItem> 
-             <MenuItem value="KENTRON SISTEMAS DE INFORMACION CR C.A.">KENTRON SISTEMAS DE INFORMACION CR C.A.</MenuItem> 
-          </TextField>
+              {seatBeneficiary.map((bene) => (
+                <MenuItem key={bene.numbenf} value={bene.numbenf}>
+                  {bene.nombre}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid item lg={2}>
             <TextFieldEditable
-              label="id. Doc Ref" 
+              label="id. Doc Ref"
               fullWidth
               variant="standard"
               size="small"
@@ -190,7 +204,7 @@ export const DocumentOrigin = ({
           </Grid>
           <Grid item lg={2}>
             <TextFieldEditable
-              label="Referencia" 
+              label="Referencia"
               fullWidth
               variant="standard"
               size="small"
@@ -204,3 +218,4 @@ export const DocumentOrigin = ({
     </CardWithBar>
   );
 }
+

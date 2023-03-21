@@ -44,23 +44,22 @@ export const SeatDetailsView = () => {
     if (seatDetails != null) {
       const updateInput: ISeatParamsUpdate = {
         idasiento: seatDetails.cabasiento.idasiento,
-        nunmov: seatDetails.cabdocumento.codsitio,
         data_asiento: {
-          descasiento: seatDetails.cabasiento.descasiento,
+          descasiento: newValues.cabasiento.descasiento,
           fecasiento: newValues.cabasiento.fecasiento,
         },
         data_documento: {
-          tipodoc: seatDetails.cabdocumento.tipodoc,
-          numbenef: seatDetails.cabdocumento.numbenef,
+          tipodoc: newValues.cabdocumento.tipodoc,
+          numbenef: newValues.cabdocumento.numbenef,
           codmoneda: seatDetails.cabdocumento.codmoneda,
           codsitio: seatDetails.cabdocumento.codsitio,
           codmonedamtodoc: seatDetails.cabdocumento.codmonedamtodoc,
           dsp_nombrebenef: seatDetails.cabdocumento.dsp_nombrebenef,
-          montoorig: seatDetails.cabdocumento.montoorig,
+          montoorig: newValues.cabdocumento.montoorig,
           mtodoc: seatDetails.cabdocumento.mtodoc,
-          refdoc: seatDetails.cabdocumento.refdoc,
-          iddocref: seatDetails.cabdocumento.iddocref,
-          indreverso: seatDetails.cabdocumento.indreverso
+          refdoc: newValues.cabdocumento.refdoc,
+          iddocref: newValues.cabdocumento.iddocref,
+          indreverso: newValues.cabdocumento.indreverso
         },
         data_movimiento: seatDetails.detasiento.map((movimiento) => {
           return {
