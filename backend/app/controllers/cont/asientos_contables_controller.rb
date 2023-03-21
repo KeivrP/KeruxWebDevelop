@@ -63,10 +63,10 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
-  # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de COCNT
+  # Acción lst_tip_doc_cont para mostrar una lista de los tipos de documentos de CONT
   def lst_tip_doc_cont
-    # Renderizar el registro encontrado como JSON, incluyendo los métodos por defecto
-    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).where(numpublicacion: params[:numpublicacion], TipoDocumento: {indactivo: "S", codruta: Doc::PasoRuta.select(:codruta).where(tipoevento: 'RCM', codproxsis: 'CONT')})
+    lst_tipodoc_cont = Cont::DefEventoCf.joins(:TipoDocumento).select(:desctipodoc, :tipodocref, :indrefdoc)
+                       .where(numpublicacion: params[:numpublicacion], TipoDocumento: {indactivo: "S", codruta: Doc::PasoRuta.select(:codruta).where(tipoevento: 'RCM', codproxsis: 'CONT')})
 
     if !lst_tipodoc_cont.empty?
       render json: lst_tipodoc_cont.as_json
@@ -96,6 +96,18 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
+  # Acción lst_moneda para mostrar una lista de las monedas disponibles
+  def lst_moneda
+    lst_moneda = Kentron::Moneda.joins(:Sitio).where(Sitio: {codsitio: params[:codsitio]}).select(:codmoneda, :nommoneda)
+    .where("(fecvigini is null or fecvigini <= ?) and (fecvigfin is null or fecvigfin >= ?)", params[:fecdoc], params[:fecdoc]).all
+    
+    if !lst_moneda.empty?
+      render json: lst_moneda.as_json
+    else
+      render json: { message: "No se encontraron registros" }
+    end
+  end
+
   # Acción UPDATE para actualizar los cambios del front-end
   def update
     # Encontramos el Asientos Contables
@@ -106,7 +118,7 @@ class Cont::AsientosContablesController < ApplicationController
     if asientos.fecasiento.strftime("%d/%m/%Y") > Time.now.strftime("%d/%m/%Y")
       render json: { message: "La fecha del asiento debe ser menor o igual que la fecha actual." }
     else
-      # Bbuscamos los parametros de control
+      # Buscamos los parametros de control
       controcf = Cont::ControlCf.first
 
       # Determinamos el Año y Periodo a partir de la fecha del asiento
@@ -214,16 +226,16 @@ class Cont::AsientosContablesController < ApplicationController
       end
 
       #Validar movimiento
-      mensaje = validar_movimiento(movimientos)
+      @mensaje = validar_movimiento(movimientos)
       # Si se guarda bien movimientos
-      if mensaje.nil?
+      if @mensaje.nil?
         if movimientos.save
           render json: movimientos.as_json
         else
           render json: movimientos.errors.full_messages.first, status: 415
         end
       else
-        render json: { message: mensaje }
+        render json: { message: @mensaje }
       end
     end
   end
@@ -240,35 +252,44 @@ class Cont::AsientosContablesController < ApplicationController
   #Botón para validar asiento
   def boton_validar
     @movimiento_val = Cont::MovimientoContable.where(idasiento: params[:idasiento])
-    validar_asiento(@movimiento_val)
+    @mensaje = validar_asiento(@movimiento_val)
+    render json: {message: @mensaje }
   end
 
   #Botón para verificar asiento
   def boton_verificar
     @movimiento_ver = Cont::MovimientoContable.where(idasiento: params[:idasiento])
-    validar_asiento(@movimiento_ver)
-    verifica_asiento(@movimiento_ver)
+    @asiento = Cont::AsientoContable.where(idasiento: params[:idasiento]).first
+    @mensaje = verifica_asiento(@movimiento_ver,@asiento)
+    render json: {message: @mensaje }
   end
 
   #Metodos que solo puedo usar en el controlador
   private
 
-  #Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
+ #Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
   def validar_asiento(movimiento)
+
     total_debito = movimiento.sum(:montodb)
     total_credito = movimiento.sum(:montocr)
-    if total_debito == total_credito
-      movimiento.each do |m| #Inicia ciclo
-        mensaje = validar_movimiento(m)
-      end #fin del each
 
-      if mensaje.nil?
-        render json: { message: "Validación Satisfactoria." }
+    if total_debito == total_credito
+      #Inicia ciclo
+      movimiento.each do |m| 
+        @mensaje = validar_movimiento(m)
+        #valida por movimiento si existe error retornarlo
+        if @mensaje != nil
+          return @mensaje
+        end    
+      end #fin del each
+    
+      if @mensaje.nil?
+        return "Validación Satisfactoria."
       else
-        render json: { message: mensaje }
+        return @mensaje
       end
     else
-      render json: { message: "Los totales del asiento no cuadran." }
+      return "Los totales del asiento no cuadran."
     end
   end
 
@@ -289,6 +310,100 @@ class Cont::AsientosContablesController < ApplicationController
       return "El movimiento sólo puede tener monto en débito o en crédito."
     end
   end
+
+  def verifica_asiento(movimiento,asiento)
+
+    @mensaje = validar_asiento(movimiento)
+    
+    #Asigno a variable la suma de todos los debitos y creditos de los movimientos
+    total_debito = movimiento.sum(:montodb)
+    total_credito = movimiento.sum(:montocr)
+  
+    if asiento.totdbcomp != total_debito
+        return "El Total de DÉBITOS es incorrecto"
+    end
+    if asiento.totcrcomp != total_credito
+        return"El Total de CRÉDITOS es incorrecto"
+    end
+
+    if @mensaje != "Validación Satisfactoria."
+      return @mensaje
+    else
+      #Inicia ciclo
+      movimiento.each do |detmov|
+        @mensaje = validar_asi_and_mov(detmov,asiento)
+        #valida por movimiento si existe error retornarlo
+        if @mensaje != nil
+          return @mensaje
+        end 
+      end #fin del each
+      
+      fecactual = Time.now
+
+      if @mensaje.nil?
+        asiento.stsasiento = 'COD'
+        asiento.fecreg = fecactual.strftime("%d/%m/%Y %H:%M:%S")
+        asiento.usureg = 'ROBERTO'
+        if asiento.save
+            return "El documento ha sido Codificado satisfactoriamente."
+        end
+      else
+        return @mensaje
+      end
+    end
+  end
+
+  def validar_asi_and_mov(movimiento,asiento)
+
+    #Buscamos los datos de la tabla control_cf y validamos que existan datos en la tabla
+      controlcf = Cont::ControlCf.first
+
+      if (controlcf.anocont == nil && controlcf.percont == nil)
+          return "No existe el Registro de Control Contable."
+      end
+      
+      #Valido que el año y periodo del asiento no sean de año o periodo cerrado
+      if asiento.anocont == controlcf.anocont
+        if asiento.percont < controlcf.percont
+          return "El Periodo del Asiento es de un periodo ya cerrado"
+        end
+      elsif asiento.anocont < controlcf.anocont
+          return "El Año del Asiento es de un año ya cerrado"
+      end
+
+      if asiento.anocont != movimiento.anocont
+        return "El Año del Movimiento no coincide con el del Asiento"
+      end
+
+      if asiento.percont != movimiento.percont
+        return "El Periodo del Movimiento no coincide con el del Asiento"
+      end
+
+      if asiento.numpublicacion != movimiento.numpublicacion
+        return "El Número de la Publicación no coincide con la del Asiento"
+      end
+
+      cuentaspub = Cont::CuentaPublicacion.where(tipo: 'D', numpublicacion: movimiento.numpublicacion, codcuenta: movimiento.codcuenta).first
+        
+      if cuentaspub.nil?
+        return "No existe la cuenta especificada en la Publicación"
+      end
+
+      if movimiento.tipoauxiliar != cuentaspub.tipoauxiliar
+        return "El Tipo de Auxiliar del Movimiento no coincide con el de la Cuenta"
+      end
+
+      auxiliar = Cont::Auxiliar.select(:codauxiliar).where(tipoauxiliar: movimiento.tipoauxiliar)
+        
+      if auxiliar.nil?
+        return "No existe el Código del Auxiliar indicado en la Cuenta"
+      end
+      
+      #valido montos totales del asiento
+      if asiento.totdbcomp != asiento.totcrcomp
+        return "Los totales del Asiento NO cuadran"
+      end
+  end #fin del metodo validar_asi_and_mov
 
   # Método privado para encontrar un asiento por su IdDoc
   def asiento_find
