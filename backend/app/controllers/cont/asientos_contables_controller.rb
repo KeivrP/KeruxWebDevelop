@@ -2,11 +2,6 @@
 class Cont::AsientosContablesController < ApplicationController
   before_action :asiento_find, :documento_find, :movimiento_contable_find, only: [:show]
 
-  interface Movimiento {
-    montocr: number;
-    montodb: number;
-  }
-
   # Acción index para listar los registros de la tabla
   def index
     # Seleccionar los campos deseados de la tabla y paginar el resultado   
@@ -236,7 +231,7 @@ class Cont::AsientosContablesController < ApplicationController
       # Si se guarda bien movimientos
       if @mensaje.nil?
         if movimientos.save
-          render json: movimientos.as_json
+          render json: { message: "Movimiento guardado con éxito." }
         else
           render json: movimientos.errors.full_messages.first, status: 415
         end
@@ -253,7 +248,7 @@ class Cont::AsientosContablesController < ApplicationController
     movimientos.destroy
   end
 
-  #Metodos para los botones de la pantalla
+  #Métodos para los botones de la pantalla
 
   #Botón para validar asiento
   def boton_validar
@@ -262,18 +257,18 @@ class Cont::AsientosContablesController < ApplicationController
     render json: { message: @mensaje }
   end
 
-  #Botón para verificar asiento
-  def boton_verificar
+  #Botón para codificar asiento
+  def boton_codificar
     @movimiento_ver = Cont::MovimientoContable.where(idasiento: params[:idasiento])
     @asiento = Cont::AsientoContable.where(idasiento: params[:idasiento]).first
-    @mensaje = verifica_asiento(@movimiento_ver, @asiento)
+    @mensaje = codifica_asiento(@movimiento_ver, @asiento)
     render json: { message: @mensaje }
   end
 
-  #Metodos que solo puedo usar en el controlador
+  #Métodos que solo puedo usar en el controlador
   private
 
-  #Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
+  #Método que valida el detalle de los movimientos que recibe del fronted para boton_validar
   def validar_asiento(movimiento)
     total_debito = movimiento.sum(:montodb)
     total_credito = movimiento.sum(:montocr)
@@ -298,7 +293,7 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
-  #Metodo que valida el detalle de los movimientos que recibe del fronted para boton_validar
+  #Método que valida el detalle de los movimientos que recibe del fronted para boton_validar
   def validar_movimiento(detmovimiento)
     #Evaluamos el tipo auxiliar y código de auxiliar
     if detmovimiento.tipoauxiliar != nil && detmovimiento.codauxiliar == nil
@@ -316,7 +311,8 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
-  def verifica_asiento(movimiento, asiento)
+  #Método que codifica ek asiento
+  def codifica_asiento(movimiento, asiento)
     @mensaje = validar_asiento(movimiento)
 
     #Asigno a variable la suma de todos los debitos y creditos de los movimientos
@@ -357,6 +353,7 @@ class Cont::AsientosContablesController < ApplicationController
     end
   end
 
+  #Método que valida el completamente el asiento y el detalle de sus movimientos
   def validar_asi_and_mov(movimiento, asiento)
 
     #Buscamos los datos de la tabla control_cf y validamos que existan datos en la tabla

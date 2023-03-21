@@ -12,7 +12,7 @@ module Kentron
         )
     
         # Se especifica el nombre de la tabla de la base de datos a utilizar
-        self.table_name = 'knt_usuario_kerux'
+        self.table_name = 'knt_usuarios_kerux'
         self.primary_key = "codusuario"
 
         # Asociaciones con otros modelos
