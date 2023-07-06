@@ -2,6 +2,11 @@
 class Cont::AsientosContablesController < ApplicationController
   before_action :asiento_find, :documento_find, :movimiento_contable_find, only: [:show]
 
+  interface Movimiento {
+    montocr: number;
+    montodb: number;
+  }
+
   # Acción index para listar los registros de la tabla
   def index
     # Seleccionar los campos deseados de la tabla y paginar el resultado   
