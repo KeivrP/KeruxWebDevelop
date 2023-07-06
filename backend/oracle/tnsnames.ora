@@ -1,0 +1,11 @@
+PREPROD = 
+  (DESCRIPTION = 
+    (ADDRESS = 
+      (PROTOCOL = TCP)
+      (HOST = 44.200.174.128)
+      (PORT = 1521)
+    )
+    (CONNECT_DATA = 
+      (SID = PREPROD)
+    )
+  )
